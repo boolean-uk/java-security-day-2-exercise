@@ -46,7 +46,7 @@ public class User {
 
     @OneToMany(mappedBy = "user")
     @JsonIgnore
-    private List<BorrowedItem> borrowedItem;
+    private List<BorrowedItem> borrowedItems;
 
     public User(String username, String email, String password) {
         this.username = username;

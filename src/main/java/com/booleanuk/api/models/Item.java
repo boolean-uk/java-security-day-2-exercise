@@ -28,7 +28,7 @@ public class Item {
 
     @OneToMany(mappedBy = "item")
     @JsonIgnore
-    private List<BorrowedItem> borrowedItem;
+    private List<BorrowedItem> borrowedItems;
 
     public Item(String name, EItemType type, String description) {
         this.name = name;
