@@ -64,8 +64,9 @@ public class UserController {
             return new ResponseEntity<>(error, HttpStatus.NOT_FOUND);
         }
         try {
-            user1.setName(user.getName());
-            user1.setPhone(user.getPhone());
+            user1.setUsername(user.getUsername());
+            user1.setEmail(user.getEmail());
+            user1.setRoles(user.getRoles());
             this.userRepository.save(user1);
         } catch (Exception e) {
             ErrorResponse errorResponse = new ErrorResponse();

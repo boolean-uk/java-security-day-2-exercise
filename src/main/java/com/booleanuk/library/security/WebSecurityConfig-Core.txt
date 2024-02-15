@@ -61,7 +61,6 @@ public class WebSecurityConfig {
                 .authorizeHttpRequests((requests) -> requests
                         .requestMatchers("/auth/**").permitAll()
                         .requestMatchers("/items", "/users").authenticated()
-                        .requestMatchers("/items/*/users/*", "/users/*/borrows").authenticated()
                         .requestMatchers("/items/**", "/users/**").hasRole("ADMIN")
                 );
         http.authenticationProvider(authenticationProvider());

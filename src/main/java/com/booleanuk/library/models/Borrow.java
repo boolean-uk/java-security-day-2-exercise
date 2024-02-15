@@ -26,12 +26,12 @@ public class Borrow {
     private ZonedDateTime returnDate = ZonedDateTime.now();
 
     @ManyToOne
-    @JoinColumn(name = "game_id", nullable = false)
+    @JoinColumn(name = "item_id", nullable = false)
     @JsonIncludeProperties(value = {"title", "isBorrowed"})
-    private Game game;
+    private Item item;
 
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
-    @JsonIncludeProperties(value = {"name"})
+    @JsonIncludeProperties(value = {"username"})
     private User user;
 }

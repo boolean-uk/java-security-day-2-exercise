@@ -1,10 +1,10 @@
 package com.booleanuk.library.controllers;
 
 import com.booleanuk.library.models.Borrow;
-import com.booleanuk.library.models.Game;
+import com.booleanuk.library.models.Item;
 import com.booleanuk.library.models.User;
 import com.booleanuk.library.repository.BorrowRepository;
-import com.booleanuk.library.repository.GameRepository;
+import com.booleanuk.library.repository.ItemRepository;
 import com.booleanuk.library.repository.UserRepository;
 import com.booleanuk.library.payload.response.BorrowListResponse;
 import com.booleanuk.library.payload.response.BorrowResponse;
@@ -25,7 +25,7 @@ public class BorrowController {
     @Autowired
     UserRepository userRepository;
     @Autowired
-    GameRepository gameRepository;
+    ItemRepository itemRepository;
 
     @GetMapping("users/{userID}/borrows")
     public ResponseEntity<Response<?>> getBorrows(@PathVariable int userID){
@@ -47,12 +47,12 @@ public class BorrowController {
     }
 
     // for renting.
-    @PostMapping("games/{gameID}/users/{userID}")
-    public ResponseEntity<Response<?>> addBorrow(@PathVariable int gameID, @PathVariable int userID, @RequestBody Borrow borrow){
-        Game game = this.gameRepository.findById(gameID).orElse(null);
-        if (game == null) {
+    @PostMapping("items/{itemID}/users/{userID}")
+    public ResponseEntity<Response<?>> addBorrow(@PathVariable int itemID, @PathVariable int userID, @RequestBody Borrow borrow){
+        Item item = this.itemRepository.findById(itemID).orElse(null);
+        if (item == null) {
             ErrorResponse error = new ErrorResponse();
-            error.set("No game with that id found.");
+            error.set("No item with that id found.");
             return new ResponseEntity<>(error, HttpStatus.NOT_FOUND);
         }
         User user = this.userRepository.findById(userID).orElse(null);
@@ -64,20 +64,21 @@ public class BorrowController {
         Borrow borrow1 = new Borrow();
         try {
             borrow1.setBorrowDate(ZonedDateTime.now());
-            borrow1.setReturnDate(borrow.getReturnDate());
-            borrow1.setGame(game);
+            borrow1.setReturnDate(ZonedDateTime.now().plusDays(7));
+            borrow1.setItem(item);
             borrow1.setUser(user);
         } catch (Exception e) {
             ErrorResponse errorResponse = new ErrorResponse();
             errorResponse.set("Could not create borrow, check fields");
             return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
         }
-        if (borrow1.getGame().getIsBorrowed()){
+        if (borrow1.getItem().getIsBorrowed()){
             ErrorResponse errorResponse = new ErrorResponse();
             errorResponse.set("Game is not available");
             return new ResponseEntity<>(errorResponse, HttpStatus.CONFLICT);
         }
-        try {game.setIsBorrowed(true);
+        try {
+            item.setIsBorrowed(true);
         } catch (Exception e){
             ErrorResponse errorResponse = new ErrorResponse();
             errorResponse.set("Could update borrow state of game");
@@ -91,10 +92,10 @@ public class BorrowController {
 
 
     // For delivering mostly...
-    @PutMapping("games/{gameID}/users/{userID}")
-    public ResponseEntity<Response<?>> updateBorrow(@PathVariable int gameID, @PathVariable int userID, @RequestBody Borrow borrow) {
-        Game game = this.gameRepository.findById(gameID).orElse(null);
-        if (game == null) {
+    @PutMapping("items/{itemID}/users/{userID}")
+    public ResponseEntity<Response<?>> updateBorrow(@PathVariable int itemID, @PathVariable int userID, @RequestBody Borrow borrow) {
+        Item item = this.itemRepository.findById(itemID).orElse(null);
+        if (item == null) {
             ErrorResponse error = new ErrorResponse();
             error.set("No game with that id found.");
             return new ResponseEntity<>(error, HttpStatus.NOT_FOUND);
@@ -109,15 +110,16 @@ public class BorrowController {
         try {
             borrow1.setBorrowDate(borrow.getBorrowDate());
             borrow1.setReturnDate(ZonedDateTime.now());
-            borrow1.setGame(game);
+            borrow1.setItem(item);
             borrow1.setUser(user);
         } catch (Exception e) {
             ErrorResponse errorResponse = new ErrorResponse();
             errorResponse.set("Could not update borrow, please check all fields are correct.");
             return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
         }
-        if (borrow1.getGame().getIsBorrowed()){
-            try {game.setIsBorrowed(false);
+        if (borrow1.getItem().getIsBorrowed()){
+            try {
+                item.setIsBorrowed(false);
         } catch (Exception e){
             ErrorResponse errorResponse = new ErrorResponse();
             errorResponse.set("Could update borrow state of game");

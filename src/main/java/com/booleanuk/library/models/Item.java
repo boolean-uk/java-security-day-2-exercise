@@ -10,23 +10,21 @@ import java.util.List;
 @Getter
 @Setter
 @Entity
-@Table(name = "games")
-public class Game {
+@Table(name = "items")
+public class Item {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     @Column
     private String title;
     @Column
-    private String studio;
-    @Column
-    private Integer ageRating;
+    private String type;
     @Column
     private String genre;
     @Column
     private Boolean isBorrowed;
 
-    @OneToMany(mappedBy = "game")
+    @OneToMany(mappedBy = "item")
     @ToString.Exclude
     private List<Borrow> borrow;
 }
