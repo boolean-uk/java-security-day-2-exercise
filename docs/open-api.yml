@@ -1,0 +1,715 @@
+openapi: 3.0.0
+info:
+  title: Library API
+  description: API for managing books, board games, CDs, DVDs, users, and video games in a library
+  version: 1.0.0
+servers:
+  - url: http://localhost:4000
+tags:
+  - name: Books
+    description: Operations related to books
+  - name: CDs
+    description: Operations related to CDs
+  - name: DVDs
+    description: Operations related to DVDs
+  - name: Board Games
+    description: Operations related to board games
+  - name: Video Games
+    description: Operations related to video games
+  - name: Users
+    description: Operations related to library users
+paths:
+  /books:
+    get:
+      summary: Get all books
+      operationId: getAllBooks
+      tags:
+        - Books
+      responses:
+        '200':
+          description: List of books
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BookListResponse'
+    post:
+      summary: Create a new book
+      operationId: createBook
+      tags:
+        - Books
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Book'
+      responses:
+        '201':
+          description: Book created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BookResponse'
+  /books/{id}:
+    get:
+      summary: Get book by ID
+      operationId: getBookById
+      tags:
+        - Books
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: ID of the book to retrieve
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Book retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BookResponse'
+        '404':
+          description: Book not found
+    put:
+      summary: Update book
+      operationId: updateBook
+      tags:
+        - Books
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: ID of the book to update
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Book'
+      responses:
+        '200':
+          description: Book updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BookResponse'
+        '404':
+          description: Book not found
+    delete:
+      summary: Delete book
+      operationId: deleteBook
+      tags:
+        - Books
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: ID of the book to delete
+          schema:
+            type: integer
+      responses:
+        '204':
+          description: Book deleted successfully
+        '404':
+          description: Book not found
+  /cds:
+    get:
+      summary: Get all CDs
+      operationId: getAllCDs
+      tags:
+        - CDs
+      responses:
+        '200':
+          description: List of CDs
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CDListResponse'
+    post:
+      summary: Create a new CD
+      operationId: createCD
+      tags:
+        - CDs
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CD'
+      responses:
+        '201':
+          description: CD created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CDResponse'
+  /cds/{id}:
+    get:
+      summary: Get CD by ID
+      operationId: getCDById
+      tags:
+        - CDs
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: ID of the CD to retrieve
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: CD retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CDResponse'
+        '404':
+          description: CD not found
+    put:
+      summary: Update CD
+      operationId: updateCD
+      tags:
+        - CDs
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: ID of the CD to update
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CD'
+      responses:
+        '200':
+          description: CD updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CDResponse'
+        '404':
+          description: CD not found
+    delete:
+      summary: Delete CD
+      operationId: deleteCD
+      tags:
+        - CDs
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: ID of the CD to delete
+          schema:
+            type: integer
+      responses:
+        '204':
+          description: CD deleted successfully
+        '404':
+          description: CD not found
+  /dvds:
+    get:
+      summary: Get all DVDs
+      operationId: getAllDVDs
+      tags:
+        - DVDs
+      responses:
+        '200':
+          description: List of DVDs
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DVDListResponse'
+    post:
+      summary: Create a new DVD
+      operationId: createDVD
+      tags:
+        - DVDs
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DVD'
+      responses:
+        '201':
+          description: DVD created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DVDResponse'
+  /dvds/{id}:
+    get:
+      summary: Get DVD by ID
+      operationId: getDVDById
+      tags:
+        - DVDs
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: ID of the DVD to retrieve
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: DVD retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DVDResponse'
+        '404':
+          description: DVD not found
+    put:
+      summary: Update DVD
+      operationId: updateDVD
+      tags:
+        - DVDs
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: ID of the DVD to update
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DVD'
+      responses:
+        '200':
+          description: DVD updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DVDResponse'
+        '404':
+          description: DVD not found
+    delete:
+      summary: Delete DVD
+      operationId: deleteDVD
+      tags:
+        - DVDs
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: ID of the DVD to delete
+          schema:
+            type: integer
+      responses:
+        '204':
+          description: DVD deleted successfully
+        '404':
+          description: DVD not found
+  /boardgames:
+    get:
+      summary: Get all board games
+      operationId: getAllBoardGames
+      tags:
+        - Board Games
+      responses:
+        '200':
+          description: List of board games
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BoardGame'
+    post:
+      summary: Create a new board game
+      operationId: createBoardGame
+      tags:
+        - Board Games
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BoardGame'
+      responses:
+        '201':
+          description: Board game created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BoardGame'
+  /boardgames/{id}:
+    get:
+      summary: Get board game by ID
+      description: Retrieve a specific board game by its ID.
+      operationId: getBoardGameById
+      tags:
+        - Board Games
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: ID of the board game to retrieve
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Board game retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BoardGameResponse'
+        '404':
+          description: Board game not found
+    put:
+      summary: Update board game
+      description: Update an existing board game in the library.
+      operationId: updateBoardGame
+      tags:
+        - Board Games
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: ID of the board game to update
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BoardGame'
+      responses:
+        '200':
+          description: Board game updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BoardGameResponse'
+        '404':
+          description: Board game not found
+    delete:
+      summary: Delete board game
+      description: Remove a board game from the library.
+      operationId: deleteBoardGame
+      tags:
+        - Board Games
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: ID of the board game to delete
+          schema:
+            type: integer
+      responses:
+        '204':
+          description: Board game deleted successfully
+        '404':
+          description: Board game not found
+  /videogames:
+    get:
+      summary: Get all video games
+      operationId: getAllVideoGames
+      tags:
+        - Video Games
+      responses:
+        '200':
+          description: List of video games
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/VideoGame'
+    post:
+      summary: Create a new video game
+      operationId: addVideoGame
+      tags:
+        - Video Games
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/VideoGame'
+      responses:
+        '201':
+          description: Video game created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/VideoGame'
+  /videogames/{id}:
+    get:
+      summary: Get video game by ID
+      operationId: getVideoGameById
+      tags:
+        - Video Games
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: ID of the video game to retrieve
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Video game retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/VideoGame'
+        '404':
+          description: Video game not found
+    put:
+      summary: Update video game
+      operationId: updateVideoGame
+      tags:
+        - Video Games
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: ID of the video game to update
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/VideoGame'
+      responses:
+        '200':
+          description: Video game updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/VideoGame'
+        '404':
+          description: Video game not found
+    delete:
+      summary: Delete video game
+      operationId: deleteVideoGame
+      tags:
+        - Video Games
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: ID of the video game to delete
+          schema:
+            type: integer
+      responses:
+        '204':
+          description: Video game deleted successfully
+        '404':
+          description: Video game not found
+
+  /users:
+    get:
+      summary: Get all users
+      description: Retrieve a list of all users in the library.
+      operationId: getAllUsers
+      tags:
+        - Users
+      responses:
+        '200':
+          description: List of users
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/User'
+  /users/{id}:
+    get:
+      summary: Get user by ID
+      description: Retrieve a specific user by their ID.
+      operationId: getUserById
+      tags:
+        - Users
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: ID of the user to retrieve
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: User retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        '404':
+          description: User not found
+
+components:
+  schemas:
+    Book:
+      type: object
+      properties:
+        id:
+          type: integer
+        title:
+          type: string
+        author:
+          type: string
+        genre:
+          type: string
+        year:
+          type: integer
+      required:
+        - title
+        - author
+        - genre
+        - year
+    BookResponse:
+      type: object
+      properties:
+        id:
+          type: integer
+        title:
+          type: string
+        author:
+          type: string
+        genre:
+          type: string
+        year:
+          type: integer
+    BookListResponse:
+      type: array
+      items:
+        $ref: '#/components/schemas/Book'
+    CD:
+      type: object
+      properties:
+        id:
+          type: integer
+        title:
+          type: string
+        artist:
+          type: string
+        genre:
+          type: string
+        year:
+          type: integer
+      required:
+        - title
+        - artist
+        - genre
+        - year
+    CDResponse:
+      type: object
+      properties:
+        id:
+          type: integer
+        title:
+          type: string
+        artist:
+          type: string
+        genre:
+          type: string
+        year:
+          type: integer
+    CDListResponse:
+      type: array
+      items:
+        $ref: '#/components/schemas/CD'
+    DVD:
+      type: object
+      properties:
+        id:
+          type: integer
+        title:
+          type: string
+        director:
+          type: string
+        genre:
+          type: string
+        year:
+          type: integer
+      required:
+        - title
+        - director
+        - genre
+        - year
+    DVDResponse:
+      type: object
+      properties:
+        id:
+          type: integer
+        title:
+          type: string
+        director:
+          type: string
+        genre:
+          type: string
+        year:
+          type: integer
+    DVDListResponse:
+      type: array
+      items:
+        $ref: '#/components/schemas/DVD'
+    BoardGame:
+      type: object
+      properties:
+        id:
+          type: integer
+        title:
+          type: string
+        manufacturer:
+          type: string
+        year:
+          type: integer
+      required:
+        - title
+        - manufacturer
+        - year
+    BoardGameResponse:
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        publisher:
+          type: string
+        year:
+          type: integer
+      required:
+        - id
+        - name
+    VideoGame:
+      type: object
+      properties:
+        id:
+          type: integer
+        title:
+          type: string
+        platform:
+          type: string
+        year:
+          type: integer
+      required:
+        - title
+        - platform
+        - year
+    User:
+      type: object
+      properties:
+        id:
+          type: integer
+        username:
+          type: string
+        email:
+          type: string
+      required:
+        - id
+        - username
+        - email
+
