@@ -1,0 +1,244 @@
+openapi: "3.0.2"
+info:
+  title: Items
+  version: "1.0"
+servers:
+  - url: http://localhost:4000
+paths:
+  /signup:
+    post:
+      tags:
+        - user
+      summary: Sign up
+      operationId: postUser
+      description: Create a user
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Signup'
+      responses:
+        '201':
+          description: Created a user
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Registered'
+
+  /signin:
+    post:
+      tags:
+        - user
+      summary: Sign in
+      operationId: Sing in
+      description: Sign in
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Signin'
+      responses:
+        '201':
+          description: Updated a video game
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SignedIn'
+  /items:
+    get:
+      tags:
+        - items
+      summary: Get all items
+      operationId: getAllItems
+      description: Get all items
+      responses:
+        '200':
+          description: Returned all items
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AllItems'
+        '401':
+          description: Unauthorized
+    post:
+      tags:
+        - items
+      summary: Create a items
+      operationId: postItem
+      description: Create a item
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateItem'
+      responses:
+        '201':
+          description: Created a item
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Item'
+        '401':
+          description: Unauthorized
+  /items/{id}:
+    get:
+      tags:
+        - items
+      summary: Get specific item
+      operationId: getItem
+      description: Get specific item
+      parameters:
+        - name: id
+          in: path
+          description: The ID of the item to get
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Returned a item
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Item'
+    put:
+      tags:
+        - items
+      summary: Update a item
+      operationId: putItem
+      description: Update a item
+      parameters:
+        - name: id
+          in: path
+          description: The ID of the item to update
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateItem'
+      responses:
+        '201':
+          description: Updated a user
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Item'
+        '401':
+          description: Unauthorized
+    delete:
+      tags:
+        - items
+      summary: Delete a item
+      operationId: deleteItem
+      description: Create a item
+      parameters:
+        - name: id
+          in: path
+          description: The ID of the item to delete
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Created a item
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreateItem'
+        '401':
+          description: Unauthorized
+
+components:
+  schemas:
+    Signup:
+      type: object
+      properties:
+        username:
+          type: string
+          example: "user"
+        email:
+          type: string
+          example: "user@email.com"
+        password:
+          type: string
+          example: "password"
+        role:
+          type: array
+          items:
+            type: string
+            example: {"admin", "user"}
+    Signin:
+      type: object
+      properties:
+        username:
+          type: string
+          example: "user"
+        password:
+          type: string
+          example: "password"
+    Registered:
+      type: object
+      properties:
+        message:
+          type: string
+          example: "User registered successfully"
+    SignedIn:
+      type: object
+      properties:
+        token:
+          type: string
+          example: "asrogjnaorwetgneorghseorgjnoefsaughoetåyhåaetou"
+        type:
+          type: string
+          example: "Bearer"
+        id:
+          type: integer
+          example: 1
+        username:
+          type: string
+          example: "user"
+        email:
+          type: string
+          example: "user@email.com"
+        password:
+          type: string
+          example: "password"
+        role:
+          type: array
+          items:
+            type: string
+            example: { "ROLE_ADMIN", "ROLE_USER" }
+    Item:
+      type: object
+      properties:
+        status:
+          type: string
+          example: "success"
+        data:
+          type: object
+          properties:
+            id:
+              type: integer
+              example: 1
+            name:
+              type: string
+              example: "harry potter"
+            type:
+              type: string
+              example: "book"
+    CreateItem:
+      type: object
+      properties:
+        name:
+          type: string
+          example: "harry potter"
+        type:
+          type: string
+          example: "book"
+    AllItems:
+      type: array
+      items:
+        $ref: '#/components/schemas/Item'
