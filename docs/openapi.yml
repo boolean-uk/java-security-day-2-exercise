@@ -1,0 +1,274 @@
+openapi: 3.1.0
+info:
+  title: Security Assignment Day 1 Exercise
+  description: Java Security with Sing assignment
+  version: 0.2.3
+  contact:
+    name: Security
+
+servers:
+  - url: http://localhost:4000
+
+tags:
+  - name: video_games
+  - name: users
+  - name: loans
+
+paths:
+  /video_games:
+    post:
+      tags:
+        - video_games
+      operationId: createVideoGame
+      summary: Create a VideoGame
+      description: Add a new VideoGame to our list of available Video Games
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateVideoGame'
+      responses:
+        '201':
+          description: VideoGame created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/VideoGame'
+    get:
+      tags:
+        - video_games
+      summary: Get all Video Games
+      description: Get all of the video games from our list
+      operationId: getVideoGames
+      responses:
+        '200':
+          description: Get all video games
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AllVideoGames'
+  /video_games/{id}:
+    get:
+      tags:
+        - video_games
+      summary: Get a video game
+      description: Get a video game by ID
+      operationId: getSpecificVideoGame
+      parameters:
+        - name: id
+          in: path
+          description: The ID of the video game to get
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Get a specific video game from the list given its ID
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/VideoGame'
+    put:
+      tags:
+        - video_games
+      summary: Update a video game
+      description: Update an existing video game by ID
+      operationId: updateVideoGame
+      parameters:
+        - name: id
+          in: path
+          description: The ID of the video game to update
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateVideoGame'
+      responses:
+        '201':
+          description: Update the given video game
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/VideoGame'
+    delete:
+      tags:
+        - video_games
+      summary: Delete a video game
+      description: Remove a video game from our list of products
+      operationId: deleteVideoGame
+      parameters:
+        - name: id
+          in: path
+          description: The ID of the video game to delete
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Delete the given video game
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/VideoGame'
+
+  /users:
+    get:
+      tags:
+        - users
+      summary: Get all Users
+      description: Get all users from the list
+      operationId: getAllUsers
+      responses:
+        '200':
+          description: Get all users
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AllUsers'
+
+    post:
+      tags:
+        - users
+      summary: Add a User
+      description: Add a new User to the list
+      operationId: addUser
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AddUser'
+      responses:
+        '201':
+          description: User added
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+
+  /users/{id}:
+    get:
+      tags:
+        - users
+      summary: Get a user
+      description: Get a user by ID
+      operationId: getSpecificUser
+      parameters:
+        - name: id
+          in: path
+          description: The ID of the user to get
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Get a specific user from the list given its ID
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+
+    put:
+      tags:
+        - users
+      summary: Update a user
+      description: Update an existing user by ID
+      operationId: updateUser
+      parameters:
+        - name: id
+          in: path
+          description: The ID of the user to update
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AddUser'
+      responses:
+        '201':
+          description: Update the given user
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+
+    delete:
+      tags:
+        - users
+      summary: Delete a user
+      description: Remove a user from our list of users
+      operationId: deleteUser
+      parameters:
+        - name: id
+          in: path
+          description: The ID of the user to delete
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Delete the given user
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+
+  /loans:
+    get:
+      tags:
+        - loans
+      summary: Get all Loans
+      description: Get all loans from the list
+      operationId: getAllLoans
+      responses:
+        '200':
+          description: Get all loans
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AllLoans'
+
+    post:
+      tags:
+        - loans
+      summary: Add a Loan
+      description: Add a new Loan to the list
+      operationId: addLoan
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AddLoan'
+      responses:
+        '201':
+          description: Loan added
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Loan'
+
+  /loans/{id}:
+    get:
+      tags:
+        - loans
+      summary: Get a loan
+      description: Get a loan by ID
+      operationId: getSpecificLoan
+      parameters:
+        - name: id
+          in: path
+          description: The ID of the loan to get
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Get a specific loan from the list given its ID
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Loan'
