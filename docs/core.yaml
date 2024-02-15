@@ -1,0 +1,288 @@
+openapi: 3.1.0
+info:
+  title: Java API Video Games & Books - Core Criteria
+  description: Core Criteria for today's exercise
+  version: 0.2.3
+  contact:
+    name: Video Games & Books Spec
+
+servers:
+  - url: http://localhost:4000
+tags:
+  - name: video games
+    description: Video Games API
+  - name: books
+    description: Books API
+
+paths:
+  /videogames:
+    post:
+      tags:
+        - video games
+      summary: Create a video game
+      description: Create a new video game
+      operationId: createVideoGame
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateVideoGame'
+      responses:
+        '201':
+          description: Successfully created a new video game
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/VideoGame'
+    get:
+      tags:
+        - video games
+      summary: Get all video games
+      description: Get a list of every video game.
+      operationId: getVideoGames
+      responses:
+        '200':
+          description: Get a list of all video games
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AllVideoGames'
+  /videogames/{id}:
+    put:
+      tags:
+        - video games
+      summary: Update a video game
+      description: Update an existing video game. For ease of implementation, all fields are required from the client.
+      operationId: updateVideoGame
+      parameters:
+        - name: id
+          in: path
+          description: The ID of the video game to update
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateVideoGame'
+      responses:
+        '201':
+          description: Successfully updated the specified video game
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/VideoGame'
+    get:
+      tags:
+        - video games
+      summary: Get a video game
+      description: Get a single video game by its ID
+      operationId: getVideoGame
+      parameters:
+        - name: id
+          in: path
+          description: The ID of the video game to retrieve
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Successfully retrieved the specified video game
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/VideoGame'
+    delete:
+      tags:
+        - video games
+      summary: Delete a video game
+      description: Delete an existing video game. When deleting data, it's useful to send the deleted record back to the client so they can re-create it if deletion was a mistake.
+      operationId: deleteVideoGame
+      parameters:
+        - name: id
+          in: path
+          description: The ID of the video game to delete
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Successfully deleted the specified video game
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/VideoGame'
+
+  /books:
+    post:
+      tags:
+        - books
+      summary: Create a book
+      description: Create a new book
+      operationId: createBook
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateBook'
+      responses:
+        '201':
+          description: Successfully created a new book
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Book'
+    get:
+      tags:
+        - books
+      summary: Get all books
+      description: Get a list of every book.
+      operationId: getBooks
+      responses:
+        '200':
+          description: Get a list of all books
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AllBooks'
+  /books/{id}:
+    put:
+      tags:
+        - books
+      summary: Update a book
+      description: Update an existing book. For ease of implementation, all fields are required from the client.
+      operationId: updateBook
+      parameters:
+        - name: id
+          in: path
+          description: The ID of the book to update
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateBook'
+      responses:
+        '201':
+          description: Successfully updated the specified book
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Book'
+    get:
+      tags:
+        - books
+      summary: Get a book
+      description: Get a single book by its ID
+      operationId: getBook
+      parameters:
+        - name: id
+          in: path
+          description: The ID of the book to retrieve
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Successfully retrieved the specified book
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Book'
+    delete:
+      tags:
+        - books
+      summary: Delete a book
+      description: Delete an existing book. When deleting data, it's useful to send the deleted record back to the client so they can re-create it if deletion was a mistake.
+      operationId: deleteBook
+      parameters:
+        - name: id
+          in: path
+          description: The ID of the book to delete
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Successfully deleted the specified book
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Book'
+
+components:
+  schemas:
+    CreateVideoGame:
+      type: object
+      required: [title, gameStudio, ageRating, genre]
+      properties:
+        title:
+          type: string
+          example: "Dark Souls"
+        gameStudio:
+          type: string
+          example: "From Software"
+        ageRating:
+          type: string
+          example: "18"
+        genre:
+          type: string
+          example: "Action RPG"
+    VideoGame:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        title:
+          type: string
+          example: "Dark Souls"
+        gameStudio:
+          type: string
+          example: "From Software"
+        ageRating:
+          type: string
+          example: "18"
+        genre:
+          type: string
+          example: "Action RPG"
+    AllVideoGames:
+      type: array
+      items:
+        $ref: '#/components/schemas/VideoGame'
+
+    CreateBook:
+      type: object
+      required: [title, author, genre]
+      properties:
+        title:
+          type: string
+          example: "1984"
+        author:
+          type: string
+          example: "George Orwell"
+        genre:
+          type: string
+          example: "Dystopian Fiction"
+    Book:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        title:
+          type: string
+          example: "1984"
+        author:
+          type: string
+          example: "George Orwell"
+        genre:
+          type: string
+          example: "Dystopian Fiction"
+    AllBooks:
+      type: array
+      items:
+        $ref: '#/components/schemas/Book'
