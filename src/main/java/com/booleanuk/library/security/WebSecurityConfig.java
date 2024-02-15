@@ -6,6 +6,7 @@ import com.booleanuk.library.security.services.UserDetailsServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
@@ -58,8 +59,13 @@ public class WebSecurityConfig {
                 .sessionManagement((session) -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests((requests) -> requests
                         .requestMatchers("/auth/**").permitAll()
-                        .requestMatchers("/books", "/books/**").authenticated()
+                        .requestMatchers("/users").hasAuthority("ROLE_ADMIN")
+                        .requestMatchers("/books").authenticated()
+                        .requestMatchers(HttpMethod.POST, "/books/*").hasAuthority("ROLE_ADMIN")
+                        .requestMatchers(HttpMethod.DELETE, "/books/*").hasAuthority("ROLE_ADMIN")
+                        .requestMatchers(HttpMethod.PUT, "/books/*").hasAuthority("ROLE_ADMIN")
                 );
+
         http.authenticationProvider(this.authenticationProvider());
         http.addFilterBefore(authenticationJwtTokenFilter(), UsernamePasswordAuthenticationFilter.class);
 

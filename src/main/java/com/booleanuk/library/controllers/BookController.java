@@ -1,14 +1,16 @@
 package com.booleanuk.library.controllers;
 
+import com.booleanuk.library.HelperUtils;
 import com.booleanuk.library.models.Book;
-import com.booleanuk.library.payload.response.BookListResponse;
-import com.booleanuk.library.payload.response.BookResponse;
-import com.booleanuk.library.payload.response.ErrorResponse;
-import com.booleanuk.library.payload.response.Response;
+import com.booleanuk.library.models.User;
+import com.booleanuk.library.payload.response.*;
 import com.booleanuk.library.repository.BookRepository;
+import com.booleanuk.library.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -16,6 +18,9 @@ import org.springframework.web.bind.annotation.*;
 public class BookController {
     @Autowired
     private BookRepository bookRepository;
+
+    @Autowired
+    private UserRepository userRepository;
 
     @GetMapping
     public ResponseEntity<BookListResponse> getAllBooks() {
@@ -79,6 +84,7 @@ public class BookController {
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Response<?>> deleteBook(@PathVariable int id) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         Book bookToDelete = this.bookRepository.findById(id).orElse(null);
         if (bookToDelete == null) {
             ErrorResponse error = new ErrorResponse();
@@ -89,5 +95,14 @@ public class BookController {
         BookResponse bookResponse = new BookResponse();
         bookResponse.set(bookToDelete);
         return ResponseEntity.ok(bookResponse);
+    }
+
+    @PutMapping("/{bookId}/users/{username}")
+    public ResponseEntity<ApiResponse<?>> borrowBookByBookIdAndUsername(@PathVariable int bookId, @PathVariable String username) {
+        User userThatBorrows = this.userRepository.findByUsername(username).orElseThrow();
+        Book bookToBorrow = this.bookRepository.findById(bookId).orElseThrow();
+        userThatBorrows.getBooks().add(bookToBorrow);
+        this.userRepository.save(userThatBorrows);
+        return HelperUtils.createdRequest(userThatBorrows);
     }
 }

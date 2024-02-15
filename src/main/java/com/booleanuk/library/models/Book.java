@@ -1,5 +1,6 @@
 package com.booleanuk.library.models;
 
+import com.fasterxml.jackson.annotation.JsonIncludeProperties;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -8,7 +9,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Entity
 @Table(name = "books")
-public class Book {
+public class Book extends Item{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
@@ -27,6 +28,11 @@ public class Book {
 
     @Column(name = "genre")
     private String genre;
+
+    @ManyToOne
+    @JoinColumn(name = "user_id", nullable = true)
+    @JsonIncludeProperties(value = {"username", "email"})
+    private User user;
 
     public Book(String title, String author, String publisher, int year, String genre) {
         this.title = title;
