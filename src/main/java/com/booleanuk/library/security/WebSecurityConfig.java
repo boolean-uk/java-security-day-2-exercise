@@ -59,8 +59,11 @@ public class WebSecurityConfig {
                 .sessionManagement((session) -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests((requests) -> requests
                         .requestMatchers("/auth/**").permitAll()
-                        .requestMatchers("/users").hasAuthority("ROLE_ADMIN")
                         .requestMatchers("/books").authenticated()
+                        .requestMatchers("/users").hasAuthority("ROLE_ADMIN")
+                        .requestMatchers(HttpMethod.GET, "/users/*/current-items").hasAuthority("ROLE_ADMIN")
+                        .requestMatchers(HttpMethod.POST, "/users/*/borrow-book/*").authenticated()
+                        .requestMatchers(HttpMethod.POST, "/users/*/return-book/*").authenticated()
                         .requestMatchers(HttpMethod.POST, "/books/*").hasAuthority("ROLE_ADMIN")
                         .requestMatchers(HttpMethod.DELETE, "/books/*").hasAuthority("ROLE_ADMIN")
                         .requestMatchers(HttpMethod.PUT, "/books/*").hasAuthority("ROLE_ADMIN")
