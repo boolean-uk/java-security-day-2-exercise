@@ -43,6 +43,9 @@ public class UserController {
             if (book.getUser() == null) {
                 book.setUser(user);
                 this.bookRepository.save(book);
+                user.getCurrentItems().add(book);
+                user.getBorrowedHistory().add(book);
+                this.userRepository.save(user);
                 return HelperUtils.createdRequest("Book borrowed successfully.");
             } else {
                 return HelperUtils.badRequest(new ApiResponse.Message("Book is already borrowed."));
@@ -61,8 +64,8 @@ public class UserController {
             User user = optionalUser.get();
             Book book = optionalBook.get();
 
-            if (user.getBooks().contains(book)) {
-                user.getBooks().remove(book);
+            if (user.getCurrentItems().contains(book)) {
+                user.getCurrentItems().remove(book);
 
                 book.setUser(null);
                 this.userRepository.save(user);
@@ -83,7 +86,7 @@ public class UserController {
 
         if (optionalUser.isPresent()) {
             User user = optionalUser.get();
-            List<Book> currentItems = user.getBooks();
+            List<Book> currentItems = user.getCurrentItems();
             return HelperUtils.okRequest(currentItems);
         } else {
             return HelperUtils.badRequest(new ApiResponse.Message("User does not exist."));

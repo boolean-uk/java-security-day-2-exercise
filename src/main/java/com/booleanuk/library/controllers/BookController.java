@@ -96,13 +96,4 @@ public class BookController {
         bookResponse.set(bookToDelete);
         return ResponseEntity.ok(bookResponse);
     }
-
-    @PutMapping("/{bookId}/users/{username}")
-    public ResponseEntity<ApiResponse<?>> borrowBookByBookIdAndUsername(@PathVariable int bookId, @PathVariable String username) {
-        User userThatBorrows = this.userRepository.findByUsername(username).orElseThrow();
-        Book bookToBorrow = this.bookRepository.findById(bookId).orElseThrow();
-        userThatBorrows.getBooks().add(bookToBorrow);
-        this.userRepository.save(userThatBorrows);
-        return HelperUtils.createdRequest(userThatBorrows);
-    }
 }

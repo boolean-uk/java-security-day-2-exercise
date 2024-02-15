@@ -47,7 +47,11 @@ public class User {
 
     @OneToMany(mappedBy = "user")
     @JsonIgnoreProperties("user")
-    private List<Book> books;
+    private List<Book> currentItems;
+
+    @ManyToMany(mappedBy = "previousUsers")
+    @JsonIgnoreProperties("previousUsers")
+    private List<Book> borrowedHistory;
 
     public User(String username, String email, String password) {
         this.username = username;
