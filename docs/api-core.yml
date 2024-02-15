@@ -1,0 +1,432 @@
+openapi: 3.1.0
+info:
+  title: Security Assignment Day 2 Exercise
+  description: Security day 2
+  version: 0.2.3
+  contact:
+    name: Security
+
+servers:
+  - url: http://localhost:4000
+tags:
+  - name: users
+  - name: borrows
+  - name: items
+
+paths:
+  /items:
+    post:
+      tags:
+        - items
+      operationId: createItem
+      summary: Create a Item
+      description: Add a new ITem to our list of available Item
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateItem'
+      responses:
+        '201':
+          description: Item created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Item'
+    get:
+      tags:
+        - items
+      summary: Get all Items
+      description: Get all of the items from our list
+      operationId: getItems
+      responses:
+        '200':
+          description: Get all items
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AllItems'
+  /items/{id}:
+    get:
+      tags:
+        - items
+      summary: Get a items
+      description: Get a items by ID
+      operationId: getSpecificItem
+      parameters:
+        - name: id
+          in: path
+          description: The ID of the Item to get
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Get a specific Item from the list given its ID
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Item'
+    put:
+      tags:
+        - items
+      summary: Update a Item
+      description: Update an existing item by ID
+      operationId: updateItem
+      parameters:
+        - name: id
+          in: path
+          description: The ID of the item to update
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateItem'
+      responses:
+        '201':
+          description: Update the given item
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Item'
+    delete:
+      tags:
+        - items
+      summary: Delete a item
+      description: Remove a item from our list of products
+      operationId: deleteitem
+      parameters:
+        - name: id
+          in: path
+          description: The ID of the item to delete
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Delete the given item
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Item'
+
+  /users:
+    get:
+      tags:
+        - users
+      summary: Get all Users
+      description: Get all users from the list
+      operationId: getAllUsers
+      responses:
+        '200':
+          description: Get all users
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AllUsers'
+
+    post:
+      tags:
+        - users
+      summary: Add a User
+      description: Add a new User to the list
+      operationId: addUser
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AddUser'
+      responses:
+        '201':
+          description: User added
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+
+  /users/{id}:
+    get:
+      tags:
+        - users
+      summary: Get a user
+      description: Get a user by ID
+      operationId: getSpecificUser
+      parameters:
+        - name: id
+          in: path
+          description: The ID of the user to get
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Get a specific user from the list given its ID
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+
+    put:
+      tags:
+        - users
+      summary: Update a user
+      description: Update an existing user by ID
+      operationId: updateUser
+      parameters:
+        - name: id
+          in: path
+          description: The ID of the user to update
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AddUser'
+      responses:
+        '201':
+          description: Update the given user
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+
+    delete:
+      tags:
+        - users
+      summary: Delete a user
+      description: Remove a user from our list of users
+      operationId: deleteUser
+      parameters:
+        - name: id
+          in: path
+          description: The ID of the user to delete
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Delete the given user
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+
+  /loans:
+    get:
+      tags:
+        - borrows
+      summary: Get all Borrows
+      description: Get all borrows from the list
+      operationId: getAllBorrows
+      responses:
+        '200':
+          description: Get all borrows
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AllBorrows'
+
+    post:
+      tags:
+        - borrows
+      summary: Add a borrow
+      description: Add a new borrow to the list
+      operationId: addBorrow
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AddBorrow'
+      responses:
+        '201':
+          description: Borrow added
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Borrow'
+
+  /loans/{id}:
+    get:
+      tags:
+        - borrows
+      summary: Get borrow
+      description: Get borrow by ID
+      operationId: getSpecificLoan
+      parameters:
+        - name: id
+          in: path
+          description: The ID of the borrow
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Get a specific borrow from the list given its ID
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Borrow'
+
+    put:
+      tags:
+        - borrows
+      summary: Update borrow
+      description: Update an existing borrow by ID
+      operationId: updateBorrow
+      parameters:
+        - name: id
+          in: path
+          description: The ID of the borrow to update
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AddBorrow'
+      responses:
+        '201':
+          description: Update the given borrow
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Borrow'
+
+    delete:
+      tags:
+        - borrows
+      summary: Delete borrow
+      description: Remove borrow from our list of loans
+      operationId: deleteBorrow
+      parameters:
+        - name: id
+          in: path
+          description: The ID of the borrow to delete
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Delete the borrow
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Borrow'
+
+components:
+  schemas:
+    CreateItem:
+      type: object
+      required: [title, format, genre, isBorrowed]
+      properties:
+        title:
+          format: string
+          example: "The Arkham Knight"
+        format:
+          type: string
+          example: "Game"
+        genre:
+          type: string
+          example: "Open world, Horror"
+        isBorrowed:
+          type: boolean
+          example: true
+    Item:
+      type: object
+      properties:
+        title:
+          type: string
+          example: "Fifa 24"
+        format:
+          type: string
+          example: "Game"
+        genre:
+          type: string
+          example: "Sports"
+        isBorrowed:
+          type: boolean
+          example: false
+    AllItems:
+      type: array
+      items:
+        $ref: '#/components/schemas/Item'
+
+    AddUser:
+      type: object
+      required: [name, email, phone]
+      properties:
+        name:
+          type: string
+          example: "Alexander Ellnestam"
+        email:
+          type: string
+          example: "alexander.ellnestam@hotmail.com"
+        phone:
+          type: string
+          example: "3498743097857"
+
+    User:
+      type: object
+      properties:
+        name:
+          type: string
+          example: "Peter Griffin"
+        email:
+          type: string
+          example: "peter.griffin@hotmail.com"
+        phone:
+          type: string
+          example: "111111111"
+
+    AllUsers:
+      type: array
+      items:
+        $ref: '#/components/schemas/User'
+
+    AddBorrow:
+      type: object
+      required: [borrowed, returned, user_id, item_id]
+      properties:
+        borrowed:
+          type: string
+          format: date-time
+          example: "2000-02-14T19:40:00"
+        endDate:
+          type: string
+          format: date-time
+          example: "2008-02-25T08:00:00"
+        user_id:
+          type: integer
+          example: 1
+        item_id:
+          type: integer
+          example: 1
+
+    Borrow:
+      type: object
+      properties:
+        startDate:
+          type: string
+          format: date-time
+          example: "2020-04-14T18:00:45"
+        endDate:
+          type: string
+          format: date-time
+          example: "2003-06-15T03:00:00"
+        user_id:
+          type: integer
+          example: 1
+        item_id:
+          type: integer
+          example: 1
+
+    AllBorrows:
+      type: array
+      items:
+        $ref: '#/components/schemas/Borrow'
