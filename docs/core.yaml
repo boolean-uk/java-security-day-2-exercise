@@ -1,63 +1,61 @@
 openapi: 3.1.0
 info:
-  title: Java API Video Games & Books - Core Criteria
+  title: Java API Items - Core Criteria
   description: Core Criteria for today's exercise
   version: 0.2.3
   contact:
-    name: Video Games & Books Spec
+    name: Items Spec
 
 servers:
   - url: http://localhost:4000
 tags:
-  - name: video games
-    description: Video Games API
-  - name: books
-    description: Books API
+  - name: items
+    description: Items API
 
 paths:
-  /videogames:
+  /items:
     post:
       tags:
-        - video games
-      summary: Create a video game
-      description: Create a new video game
-      operationId: createVideoGame
+        - items
+      summary: Create a item
+      description: Create a new item
+      operationId: createItem
       requestBody:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/CreateVideoGame'
+              $ref: '#/components/schemas/CreateItem'
       responses:
         '201':
-          description: Successfully created a new video game
+          description: Successfully created a new item
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/VideoGame'
+                $ref: '#/components/schemas/Item'
     get:
       tags:
-        - video games
-      summary: Get all video games
-      description: Get a list of every video game.
-      operationId: getVideoGames
+        - items
+      summary: Get all items
+      description: Get a list of every item.
+      operationId: getItems
       responses:
         '200':
-          description: Get a list of all video games
+          description: Get a list of all items
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/AllVideoGames'
-  /videogames/{id}:
+                $ref: '#/components/schemas/AllItems'
+  /items/{id}:
     put:
       tags:
-        - video games
-      summary: Update a video game
-      description: Update an existing video game. For ease of implementation, all fields are required from the client.
-      operationId: updateVideoGame
+        - items
+      summary: Update a item
+      description: Update an existing item. For ease of implementation, all fields are required from the client.
+      operationId: updateItem
       parameters:
         - name: id
           in: path
-          description: The ID of the video game to update
+          description: The ID of the item to update
           required: true
           schema:
             type: integer
@@ -65,196 +63,58 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/CreateVideoGame'
+              $ref: '#/components/schemas/CreateItem'
       responses:
         '201':
-          description: Successfully updated the specified video game
+          description: Successfully updated the specified item
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/VideoGame'
+                $ref: '#/components/schemas/Item'
     get:
       tags:
-        - video games
-      summary: Get a video game
-      description: Get a single video game by its ID
-      operationId: getVideoGame
+        - items
+      summary: Get a item
+      description: Get a single item by its ID
+      operationId: getItem
       parameters:
         - name: id
           in: path
-          description: The ID of the video game to retrieve
+          description: The ID of the item to retrieve
           required: true
           schema:
             type: integer
       responses:
         '200':
-          description: Successfully retrieved the specified video game
+          description: Successfully retrieved the specified item
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/VideoGame'
+                $ref: '#/components/schemas/Item'
     delete:
       tags:
-        - video games
-      summary: Delete a video game
-      description: Delete an existing video game. When deleting data, it's useful to send the deleted record back to the client so they can re-create it if deletion was a mistake.
-      operationId: deleteVideoGame
+        - items
+      summary: Delete a item
+      description: Delete an existing item. When deleting data, it's useful to send the deleted record back to the client so they can re-create it if deletion was a mistake.
+      operationId: deleteItem
       parameters:
         - name: id
           in: path
-          description: The ID of the video game to delete
+          description: The ID of the item to delete
           required: true
           schema:
             type: integer
       responses:
         '200':
-          description: Successfully deleted the specified video game
+          description: Successfully deleted the specified item
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/VideoGame'
-
-  /books:
-    post:
-      tags:
-        - books
-      summary: Create a book
-      description: Create a new book
-      operationId: createBook
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/CreateBook'
-      responses:
-        '201':
-          description: Successfully created a new book
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Book'
-    get:
-      tags:
-        - books
-      summary: Get all books
-      description: Get a list of every book.
-      operationId: getBooks
-      responses:
-        '200':
-          description: Get a list of all books
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/AllBooks'
-  /books/{id}:
-    put:
-      tags:
-        - books
-      summary: Update a book
-      description: Update an existing book. For ease of implementation, all fields are required from the client.
-      operationId: updateBook
-      parameters:
-        - name: id
-          in: path
-          description: The ID of the book to update
-          required: true
-          schema:
-            type: integer
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/CreateBook'
-      responses:
-        '201':
-          description: Successfully updated the specified book
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Book'
-    get:
-      tags:
-        - books
-      summary: Get a book
-      description: Get a single book by its ID
-      operationId: getBook
-      parameters:
-        - name: id
-          in: path
-          description: The ID of the book to retrieve
-          required: true
-          schema:
-            type: integer
-      responses:
-        '200':
-          description: Successfully retrieved the specified book
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Book'
-    delete:
-      tags:
-        - books
-      summary: Delete a book
-      description: Delete an existing book. When deleting data, it's useful to send the deleted record back to the client so they can re-create it if deletion was a mistake.
-      operationId: deleteBook
-      parameters:
-        - name: id
-          in: path
-          description: The ID of the book to delete
-          required: true
-          schema:
-            type: integer
-      responses:
-        '200':
-          description: Successfully deleted the specified book
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Book'
+                $ref: '#/components/schemas/Item'
 
 components:
   schemas:
-    CreateVideoGame:
-      type: object
-      required: [title, gameStudio, ageRating, genre]
-      properties:
-        title:
-          type: string
-          example: "Dark Souls"
-        gameStudio:
-          type: string
-          example: "From Software"
-        ageRating:
-          type: string
-          example: "18"
-        genre:
-          type: string
-          example: "Action RPG"
-    VideoGame:
-      type: object
-      properties:
-        id:
-          type: integer
-          example: 1
-        title:
-          type: string
-          example: "Dark Souls"
-        gameStudio:
-          type: string
-          example: "From Software"
-        ageRating:
-          type: string
-          example: "18"
-        genre:
-          type: string
-          example: "Action RPG"
-    AllVideoGames:
-      type: array
-      items:
-        $ref: '#/components/schemas/VideoGame'
-
-    CreateBook:
+    CreateItem:
       type: object
       required: [title, author, genre]
       properties:
@@ -267,7 +127,7 @@ components:
         genre:
           type: string
           example: "Dystopian Fiction"
-    Book:
+    Item:
       type: object
       properties:
         id:
@@ -282,7 +142,7 @@ components:
         genre:
           type: string
           example: "Dystopian Fiction"
-    AllBooks:
+    AllItems:
       type: array
       items:
-        $ref: '#/components/schemas/Book'
+        $ref: '#/components/schemas/Item'
