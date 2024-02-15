@@ -1,108 +1,26 @@
 openapi: 3.0.3
 info:
   title: Java API Exercise - Core Criteria
-  description: Core Criteria for the Java Game Security Challenge
+  description: Core Criteria for the Library loan
   version: 0.2.2
   contact:
-    name: Game Security Challenge
+    name: Library Loan Challenge
 
 servers:
   - url: http://localhost:4000
 
 tags:
   - name: users
-  - name: games
+  - name: items
 
 paths:
-  /games:
-    post:
-      tags:
-        - games
-      summary: Create a game
-      description: Create a new game
-      operationId: createGame
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/CreateGame'
-      responses:
-        '201':
-          description: Successfully created a new game
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Game'
-
-    get:
-      tags:
-        - games
-      summary: Get all games
-      description: Get a list of games
-      operationId: getGames
-      responses:
-        '200':
-          description: Get a list of all games
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/AllGames'
-
-  /games/{id}:
-    put:
-      tags:
-        - games
-      summary: Update a game
-      description: Update existing game
-      operationId: updateGame
-      parameters:
-        - name: id
-          in: path
-          description: The ID of the game to update
-          required: true
-          schema:
-            type: integer
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/CreateGame'
-      responses:
-        '201':
-          description: Successfully updated the specified game
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Game'
-
-    delete:
-      tags:
-        - games
-      summary: Delete a game
-      description: Delete an existing game
-      operationId: deleteGame
-      parameters:
-        - name: id
-          in: path
-          description: The ID of the game to delete
-          required: true
-          schema:
-            type: integer
-      responses:
-        '200':
-          description: Successfully deleted the specified game
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Game'
-
-  /users:
+  /auth/signup:
     post:
       tags:
         - users
-      summary: Create a user
-      description: Create a new.
-      operationId: createUser
+      summary: User signup
+      description: Create a new user account
+      operationId: userSignup
       requestBody:
         content:
           application/json:
@@ -115,50 +33,75 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/User'
-    get:
+  /auth/signin:
+    post:
       tags:
         - users
-      summary: Get all users
-      description: Get a list of user.
-      operationId: getUsers
-      responses:
-        '200':
-          description: Get a list of all users
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/AllUsers'
-  /users/{id}:
-    get:
-      tags:
-        - users
-      summary: Get a user
-      description: Get a specific user.
-      operationId: getUser
-      parameters:
-        - name: id
-          in: path
-          description: The ID of the user to get
-          required: true
-          schema:
-            type: integer
+      summary: User signin
+      description: Sign in an existing user
+      operationId: userSignin
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserSignin'
       responses:
         '201':
-          description: Successfully get the specified user
+          description: User successfully signed in
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/User'
+  /items:
+    post:
+      tags:
+        - items
+      summary: Create an item
+      security:
+        - jwt:
+            - ADMIN
+      operationId: createItem
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateItem'
+      responses:
+        '201':
+          description: Successfully created a new item
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Item'
+
+    get:
+      tags:
+        - items
+      summary: Get all items
+      description: Get a list of item
+      operationId: getItems
+      responses:
+        '200':
+          description: Get a list of all items
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AllItems'
+
+  /items/{id}:
     put:
       tags:
-        - users
-      summary: Update a user
-      description: Update an existing user
-      operationId: updateUser
+        - items
+      summary: Update an item
+      description: Update existing game
+      operationId: updateGame
+      security:
+        - jwt:
+            - ADMIN
       parameters:
         - name: id
           in: path
-          description: The ID of the user to update
+          description: The ID of the item to update
           required: true
           schema:
             type: integer
@@ -166,96 +109,118 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/CreateUser'
+              $ref: '#/components/schemas/CreateItem'
       responses:
         '201':
-          description: Successfully updated the specified user
+          description: Successfully updated the specified item
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/User'
+                $ref: '#/components/schemas/Item'
+
     delete:
       tags:
-        - users
-      summary: Delete a user
-      description: Delete an existing user
-      operationId: deleteUser
+        - items
+      summary: Delete an item
+      description: Delete an existing item
+      operationId: deleteItem
+      security:
+        - jwt:
+            - ADMIN
       parameters:
         - name: id
           in: path
-          description: The ID of the user to delete
+          description: The ID of the item to delete
           required: true
           schema:
             type: integer
       responses:
         '200':
-          description: Successfully deleted the specified user
+          description: Successfully deleted the specified item
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/User'
+                $ref: '#/components/schemas/Item'
 
-components:
-  schemas:
-    CreateGame:
-      type: object
-      required: [title, gameStudio, ageRating, numberOfPlayer, genre]
-      properties:
-        title:
-          type: string
-          example: "Fortnite"
-        gameStudio:
-          type: string
-          example: "Epic Games"
-        ageRating:
-          type: integer
-          example: 13
-        numberOfPlayer:
-          type: integer
-          example: 2
-        genre:
-          type: string
-          example: "Action"
+  components:
+    schemas:
+      CreateUser:
+        type: object
+        required: [ name, email, password, roles ]
+        properties:
+          name:
+            type: string
+            example: "Dave"
+          email:
+            type: string
+            format: string
+            example: "dave@gmail.com"
+          password:
+            type: string
+            format: string
+            example: "password"
+          roles:
+            type: array
+            format: array
+            example: [ "admin" ]
+      User:
+        type: object
+        properties:
+          id:
+            type: integer
+            example: 1
+          name:
+            type: string
+            example: "Dave"
+          email:
+            type: string
+            example: "dave@example.com"
+      AllUsers:
+        type: array
+        items:
+          $ref: '#/components/schemas/User'
 
-    Game:
-      type: object
-      properties:
-        title:
-          type: string
-        gameStudio:
-          type: string
-        ageRating:
-          type: integer
-        numberOfPlayer:
-          type: integer
-        genre:
-          type: string
+      UserSignin:
+        type: object
+        required: [ username, password ]
+        properties:
+          username:
+            type: string
+            example: "Dave"
+          password:
+            type: string
+            format: string
+            example: "password"
 
-    AllGames:
-      type: array
-      items:
-        $ref: '#/components/schemas/Game'
-    CreateUser:
-      type: object
-      required: [ name, email]
-      properties:
-        name:
-          type: string
-          example: "John"
-        email:
-          type: string
-          example: "john@gamil.com"
+      CreateItem:
+        type: object
+        required: [ title, type ]
+        properties:
+          title:
+            type: string
+            example: "Title"
+          type:
+            type: string
+            example: "book"
+      Item:
+        type: object
+        properties:
+          id:
+            type: integer
+            example: 1
+          title:
+            type: string
+            example: "Title"
+          type:
+            type: string
+            example: "book"
+      AllItems:
+        type: array
+        items:
+          $ref: '#/components/schemas/Item'
 
-    User:
-      type: object
-      properties:
-        name:
-          type: string
-        email:
-          type: string
-
-
-    AllUsers:
-      type: array
-      items:
-        $ref: '#/components/schemas/User'
+    securitySchemes:
+      jwt:
+        type: apiKey
+        in: header
+        name: Authorization

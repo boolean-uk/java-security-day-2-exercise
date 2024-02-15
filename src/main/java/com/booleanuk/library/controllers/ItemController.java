@@ -59,8 +59,7 @@ public class ItemController {
             return new ResponseEntity<>(error, HttpStatus.NOT_FOUND);
         }
         itemToUpdate.setTitle(item.getTitle());
-        itemToUpdate.setYear(item.getYear());
-        itemToUpdate.setGenre(item.getGenre());
+        itemToUpdate.setType(item.getType());
 
         try {
             itemToUpdate = this.itemRepository.save(itemToUpdate);
