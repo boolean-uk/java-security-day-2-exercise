@@ -40,4 +40,19 @@ public class ItemController {
         return new ResponseEntity<>(itemResponse, HttpStatus.CREATED);
     }
 
+    @DeleteMapping("/{id}")
+    public  ResponseEntity<?> delete(@PathVariable int id) {
+        Item itemToDelete = this.repository.findById(id).orElse(null);
+        if (itemToDelete == null) {
+            ErrorResponse error = new ErrorResponse();
+            error.set("not found");
+            return new ResponseEntity<>(error, HttpStatus.NOT_FOUND);
+        }
+        this.repository.delete(itemToDelete);
+        ItemResponse itemResponse = new ItemResponse();
+        itemResponse.set(itemToDelete);
+        //Item.setBorrowedItems(new ArrayList<>());
+        return ResponseEntity.ok(itemResponse);
+    }
+
 }
