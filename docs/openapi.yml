@@ -1,0 +1,268 @@
+openapi: 3.1.0
+info:
+  title: Java API - Item and UserItem
+  description: API documentation for managing items and user-item history. Only the admin can access the POST, PUT and DELETE for the tables. the USERS can only do GET requests.
+  version: 1.0.0
+  contact:
+    name: Java Security Day 2
+
+servers:
+  - url: http://localhost:4000
+
+tags:
+  - name: items
+  - name: user-items
+
+paths:
+  /items:
+    get:
+      tags:
+        - items
+      summary: Get all items
+      operationId: getAllItems
+      responses:
+        '200':
+          description: Successfully retrieved a list of all items
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AllItems'
+
+  /items/{id}:
+    get:
+      tags:
+        - items
+      summary: Get item by ID
+      operationId: getItemById
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Successfully retrieved the specified item
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Item'
+
+    put:
+      tags:
+        - items
+      summary: Update item by ID
+      operationId: updateItemById
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateItem'
+      responses:
+        '200':
+          description: Successfully updated the specified item
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Item'
+
+    delete:
+      tags:
+        - items
+      summary: Delete item by ID
+      operationId: deleteItemById
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '204':
+          description: Successfully deleted the specified item
+
+  /user-items:
+    get:
+      tags:
+        - user-items
+      summary: Get all user-items
+      operationId: getAllUserItems
+      responses:
+        '200':
+          description: Successfully retrieved a list of all user-items
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AllUserItems'
+
+    post:
+      tags:
+        - user-items
+      summary: Create a user-item
+      operationId: createUserItem
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateUserItem'
+      responses:
+        '201':
+          description: Successfully created a new user-item
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserItem'
+
+  /user-items/{id}:
+    get:
+      tags:
+        - user-items
+      summary: Get user-item by ID
+      operationId: getUserItemById
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Successfully retrieved the specified user-item
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserItem'
+
+    put:
+      tags:
+        - user-items
+      summary: Update user-item by ID
+      operationId: updateUserItemById
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateUserItem'
+      responses:
+        '200':
+          description: Successfully updated the specified user-item
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserItem'
+
+    delete:
+      tags:
+        - user-items
+      summary: Delete user-item by ID
+      operationId: deleteUserItemById
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '204':
+          description: Successfully deleted the specified user-item
+
+components:
+  schemas:
+    Item:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        itemName:
+          type: string
+          example: "Item1"
+        itemType:
+          type: string
+          example: "TypeA"
+
+    UpdateItem:
+      type: object
+      properties:
+        itemName:
+          type: string
+          example: "UpdatedItemName"
+        itemType:
+          type: string
+          example: "UpdatedItemType"
+
+    AllItems:
+      type: array
+      items:
+        $ref: '#/components/schemas/Item'
+
+    CreateUserItem:
+      type: object
+      properties:
+        userId:
+          type: integer
+          example: 1
+        itemId:
+          type: integer
+          example: 1
+        borrowedAt:
+          type: string
+          format: date-time
+          example: "2023-03-14T11:01:56.633+00:00"
+        isOngoing:
+          type: boolean
+          example: true
+
+    UserItem:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        user:
+          $ref: '#/components/schemas/User'
+        item:
+          $ref: '#/components/schemas/Item'
+        borrowedAt:
+          type: string
+          format: date-time
+          example: "2023-03-14T11:01:56.633+00:00"
+        returnedAt:
+          type: string
+          format: date-time
+          example: "2023-03-14T11:01:56.633+00:00"
+        isOngoing:
+          type: boolean
+          example: true
+
+    UpdateUserItem:
+      type: object
+      properties:
+        borrowedAt:
+          type: string
+          format: date-time
+          example: "2023-03-14T11:01:56.633+00:00"
+        returnedAt:
+          type: string
+          format: date-time
+          example: "2023-03-14T11:01:56.633+00:00"
+        isOngoing:
+          type: boolean
+          example: false
+
+    AllUserItems:
+      type: array
+      items:
+        $ref: '#/components/schemas/UserItem'
