@@ -1,6 +1,5 @@
-package com.booleanuk.library.model;
+package com.booleanuk.library.models;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -28,10 +27,6 @@ public class VideoGame {
 
     @Column(name = "genre")
     private String genre;
-
-    @OneToOne(mappedBy = "videoGame")
-    @JsonIgnoreProperties("videoGame")
-    private Loan loan;
 
     public VideoGame(String title, String studio, String rating, int numberOfPlayers, String genre) {
         this.title = title;

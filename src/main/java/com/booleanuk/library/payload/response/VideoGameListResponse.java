@@ -1,6 +1,6 @@
-package com.booleanuk.library.response;
+package com.booleanuk.library.payload.response;
 
-import com.booleanuk.library.model.VideoGame;
+import com.booleanuk.library.models.VideoGame;
 
 import java.util.List;
 

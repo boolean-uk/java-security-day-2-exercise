@@ -1,4 +1,4 @@
-package com.booleanuk.library.response;
+package com.booleanuk.library.payload.response;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
