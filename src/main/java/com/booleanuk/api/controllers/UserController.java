@@ -2,14 +2,15 @@ package com.booleanuk.api.controllers;
 
 import com.booleanuk.api.models.User;
 import com.booleanuk.api.repositories.UserRepository;
-import com.booleanuk.api.responses.ErrorResponse;
-import com.booleanuk.api.responses.Response;
+import com.booleanuk.api.payload.responses.ErrorResponse;
+import com.booleanuk.api.payload.responses.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 
 @RestController
@@ -40,7 +41,7 @@ public class UserController {
 
     @PostMapping
     public ResponseEntity<Response<?>> addUser(@RequestBody User user){
-        if (user.getName() == null ||
+        if (user.getUsername() == null ||
                 user.getEmail() == null ||
                 user.getPhone() == null){
             ErrorResponse errorResponse = new ErrorResponse();
@@ -60,14 +61,14 @@ public class UserController {
             errorResponse.set("not found");
             return new ResponseEntity<>(errorResponse, HttpStatus.NOT_FOUND);
         }
-        if (user.getName() == null ||
+        if (user.getUsername() == null ||
                 user.getEmail() == null ||
                 user.getPhone() == null){
             ErrorResponse errorResponse = new ErrorResponse();
             errorResponse.set("bad request");
             return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
         }
-        updateUser.setName(user.getName());
+        updateUser.setUsername(user.getUsername());
         updateUser.setEmail(user.getEmail());
         updateUser.setPhone(user.getPhone());
 
@@ -87,6 +88,7 @@ public class UserController {
         }
         this.userRepository.delete(deleteUser);
         deleteUser.setLoaning(new ArrayList<>());
+        deleteUser.setRoles(new HashSet<>());
         Response<User> response = new Response<>();
         response.set(deleteUser);
         return ResponseEntity.ok(response);

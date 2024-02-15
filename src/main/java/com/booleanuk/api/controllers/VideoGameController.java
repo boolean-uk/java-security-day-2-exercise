@@ -2,8 +2,8 @@ package com.booleanuk.api.controllers;
 
 import com.booleanuk.api.models.VideoGame;
 import com.booleanuk.api.repositories.VideoGameRepository;
-import com.booleanuk.api.responses.ErrorResponse;
-import com.booleanuk.api.responses.Response;
+import com.booleanuk.api.payload.responses.ErrorResponse;
+import com.booleanuk.api.payload.responses.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
