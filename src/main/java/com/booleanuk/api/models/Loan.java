@@ -22,8 +22,8 @@ public class Loan {
     private User user;
 
     @ManyToOne
-    @JoinColumn(name = "video_game_id", nullable = false)
-    private VideoGame videoGame;
+    @JoinColumn(name = "item_id", nullable = false)
+    private Item item;
 
     @Column
     private LocalDateTime startDate;

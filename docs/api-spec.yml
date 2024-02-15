@@ -9,74 +9,74 @@ info:
 servers:
   - url: http://localhost:4000
 tags:
-  - name: video_games
+  - name: item
   - name: users
   - name: loans
 
 paths:
-  /video_games:
+  /items:
     post:
       tags:
-        - video_games
-      operationId: createVideoGame
-      summary: Create a VideoGame
-      description: Add a new VideoGame to our list of available Video Games
+        - items
+      operationId: createItem
+      summary: Create a Item
+      description: Add a new ITem to our list of available Item
       requestBody:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/CreateVideoGame'
+              $ref: '#/components/schemas/CreateItem'
       responses:
         '201':
-          description: VideoGame created
+          description: Item created
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/VideoGame'
+                $ref: '#/components/schemas/Item'
     get:
       tags:
-        - video_games
-      summary: Get all Video Games
-      description: Get all of the video games from our list
-      operationId: getVideoGames
+        - items
+      summary: Get all Items
+      description: Get all of the items from our list
+      operationId: getItems
       responses:
         '200':
-          description: Get all video games
+          description: Get all items
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/AllVideoGames'
-  /video_games/{id}:
+                $ref: '#/components/schemas/AllItems'
+  /items/{id}:
     get:
       tags:
-        - video_games
-      summary: Get a video game
-      description: Get a video game by ID
-      operationId: getSpecificVideoGame
+        - items
+      summary: Get a items
+      description: Get a items by ID
+      operationId: getSpecificItem
       parameters:
         - name: id
           in: path
-          description: The ID of the video game to get
+          description: The ID of the Item to get
           required: true
           schema:
             type: integer
       responses:
         '200':
-          description: Get a specific video game from the list given its ID
+          description: Get a specific Item from the list given its ID
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/VideoGame'
+                $ref: '#/components/schemas/Item'
     put:
       tags:
-        - video_games
-      summary: Update a video game
-      description: Update an existing video game by ID
-      operationId: updateVideoGame
+        - items
+      summary: Update a Item
+      description: Update an existing item by ID
+      operationId: updateItem
       parameters:
         - name: id
           in: path
-          description: The ID of the video game to update
+          description: The ID of the item to update
           required: true
           schema:
             type: integer
@@ -84,34 +84,34 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/CreateVideoGame'
+              $ref: '#/components/schemas/CreateItem'
       responses:
         '201':
-          description: Update the given video game
+          description: Update the given item
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/VideoGame'
+                $ref: '#/components/schemas/Item'
     delete:
       tags:
-        - video_games
-      summary: Delete a video game
-      description: Remove a video game from our list of products
-      operationId: deleteVideoGame
+        - items
+      summary: Delete a item
+      description: Remove a item from our list of products
+      operationId: deleteitem
       parameters:
         - name: id
           in: path
-          description: The ID of the video game to delete
+          description: The ID of the item to delete
           required: true
           schema:
             type: integer
       responses:
         '200':
-          description: Delete the given video game
+          description: Delete the given item
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/VideoGame'
+                $ref: '#/components/schemas/Item'
 
   /users:
     get:
@@ -321,47 +321,41 @@ paths:
 
 components:
   schemas:
-    CreateVideoGame:
+    CreateItem:
       type: object
-      required: [title, game_studio, age_rating, numberOfPlayers, genre]
+      required: [title,type, description, genre]
       properties:
         title:
           type: string
           example: "The Legend of Zelda: Tears Of the Kingdom"
-        game_studio:
+        type:
           type: string
-          example: "Nintendo"
-        age_rating:
+          example: "Game"
+        description:
           type: string
-          example: "T"
-        numberOfPlayers:
-          type: integer
-          example: 1
+          example: "Open world, Action-adventure video game"
         genre:
           type: string
           example: "Action-adventure"
-    VideoGame:
+    Item:
       type: object
       properties:
         title:
           type: string
           example: "The Legend of Zelda: Tears Of the Kingdom"
-        game_studio:
+        type:
           type: string
-          example: "Nintendo"
-        age_rating:
+          example: "Game"
+        description:
           type: string
-          example: "T"
-        numberOfPlayers:
-          type: integer
-          example: 1
+          example: "Open world, Action-adventure video game"
         genre:
           type: string
           example: "Action-adventure"
-    AllVideoGames:
+    AllItems:
       type: array
       items:
-        $ref: '#/components/schemas/VideoGame'
+        $ref: '#/components/schemas/Item'
 
     AddUser:
       type: object
@@ -397,7 +391,7 @@ components:
 
     AddLoan:
       type: object
-      required: [startDate, endDate, user_id, video_game_id]
+      required: [startDate, endDate, user_id, item_id]
       properties:
         startDate:
           type: string
@@ -410,7 +404,7 @@ components:
         user_id:
           type: integer
           example: 1
-        video_game_id:
+        item_id:
           type: integer
           example: 1
 
@@ -428,7 +422,7 @@ components:
         user_id:
           type: integer
           example: 1
-        video_game_id:
+        item_id:
           type: integer
           example: 1
 

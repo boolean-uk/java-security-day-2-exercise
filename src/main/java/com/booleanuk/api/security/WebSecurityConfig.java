@@ -58,7 +58,7 @@ public class WebSecurityConfig {
                 .sessionManagement((session) -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests((requests) -> requests
                         .requestMatchers("/auth/**").permitAll()
-                        .requestMatchers("/video_games","/video_games/**",
+                        .requestMatchers("/items","/items/**",
                                 "/loans","/loans/**","/users", "/users/**").authenticated()
 
                 );
