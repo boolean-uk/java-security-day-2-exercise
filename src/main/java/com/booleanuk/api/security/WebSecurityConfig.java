@@ -3,7 +3,7 @@ package com.booleanuk.api.security;
 import com.booleanuk.api.security.jwt.AuthEntryPointJwt;
 import com.booleanuk.api.security.jwt.AuthTokenFilter;
 import com.booleanuk.api.security.services.UserDetailsServiceImpl;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.AllArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -11,6 +11,7 @@ import org.springframework.security.authentication.dao.DaoAuthenticationProvider
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -19,12 +20,10 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 
 @Configuration
 @EnableWebSecurity
+@AllArgsConstructor
 public class WebSecurityConfig {
-    @Autowired
-    UserDetailsServiceImpl userDetailsService;
-
-    @Autowired
-    private AuthEntryPointJwt unauthorizedHandler;
+    private final UserDetailsServiceImpl userDetailsService;
+    private final AuthEntryPointJwt unauthorizedHandler;
 
     @Bean
     public AuthTokenFilter authenticationJwtTokenFilter() {
@@ -54,11 +53,12 @@ public class WebSecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
-                .csrf((csrf) -> csrf.disable())
+                .csrf(AbstractHttpConfigurer::disable)
                 .exceptionHandling((exception) -> exception.authenticationEntryPoint(unauthorizedHandler))
                 .sessionManagement((session) -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests((requests) -> requests
                         .requestMatchers("/auth/**").permitAll()
+                        .requestMatchers("/items/**").authenticated()
                 );
         http.authenticationProvider(authenticationProvider());
         http.addFilterBefore(authenticationJwtTokenFilter(), UsernamePasswordAuthenticationFilter.class);

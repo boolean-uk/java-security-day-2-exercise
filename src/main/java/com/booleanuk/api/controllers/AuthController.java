@@ -12,11 +12,12 @@ import com.booleanuk.api.repositories.UserRepository;
 import com.booleanuk.api.security.jwt.JwtUtils;
 import com.booleanuk.api.security.services.UserDetailsImpl;
 import jakarta.validation.Valid;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
@@ -29,23 +30,15 @@ import java.util.stream.Collectors;
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
 @RequestMapping("auth")
+@AllArgsConstructor
 public class AuthController {
-    @Autowired
-    AuthenticationManager authenticationManager;
+    private final AuthenticationManager authenticationManager;
+    private final UserRepository userRepository;
+    private final RoleRepository roleRepository;
+    private final PasswordEncoder encoder;
+    private final JwtUtils jwtUtils;
 
-    @Autowired
-    UserRepository userRepository;
-
-    @Autowired
-    RoleRepository roleRepository;
-
-    @Autowired
-    PasswordEncoder encoder;
-
-    @Autowired
-    JwtUtils jwtUtils;
-
-    @PostMapping("/signin")
+    @PostMapping("/login")
     public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest loginRequest) {
         // If using a salt for password use it here
         Authentication authentication = authenticationManager
@@ -54,7 +47,7 @@ public class AuthController {
         String jwt = jwtUtils.generateJwtToken(authentication);
 
         UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
-        List<String> roles = userDetails.getAuthorities().stream().map((item) -> item.getAuthority())
+        List<String> roles = userDetails.getAuthorities().stream().map(GrantedAuthority::getAuthority)
                 .collect(Collectors.toList());
         return ResponseEntity
                 .ok(new JwtResponse(jwt, userDetails.getId(), userDetails.getUsername(), userDetails.getEmail(), roles));
