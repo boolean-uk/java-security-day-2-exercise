@@ -61,7 +61,7 @@ public class WebSecurityConfig {
                 .authorizeHttpRequests((requests) -> requests
                         .requestMatchers("/auth/**").permitAll()
                         .requestMatchers(HttpMethod.GET,"/items", "/items/*").authenticated()
-                        .requestMatchers(HttpMethod.POST, "/items/*").hasAuthority("ROLE_ADMIN")
+                        .requestMatchers(HttpMethod.POST, "/items").hasAuthority("ROLE_ADMIN")
                         .requestMatchers(HttpMethod.DELETE, "/items/*").hasAuthority("ROLE_ADMIN")
                         .requestMatchers(HttpMethod.PUT, "/items/*").hasAuthority("ROLE_ADMIN")
                 );
