@@ -30,6 +30,8 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Item'
+        '401':
+          description: Unauthorized access
 
     get:
       tags:
@@ -70,6 +72,8 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/item'
+        '401':
+          description: Unauthorized access
 
     delete:
       tags:
@@ -91,6 +95,8 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Item'
+        '401':
+          description: Unauthorized access
 
     get:
       tags:
@@ -112,6 +118,55 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Item'
+  /auth/signin:
+    post:
+      tags:
+        - authentication
+      summary: Authenticate User
+      description: Authenticates a user and returns a JWT token
+      operationId: authenticateUser
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LoginRequest'
+      responses:
+        '200':
+          description: Successful authentication
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/JwtResponse'
+        '401':
+          description: Unauthorized - Invalid credentials
+
+  /auth/signup:
+    post:
+      tags:
+        - authentication
+      summary: Register User
+      description: Registers a new user
+      operationId: registerUser
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SignupRequest'
+      responses:
+        '200':
+          description: User registered successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MessageResponse'
+        '400':
+          description: Bad Request - Username or email already taken
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MessageResponse'
 
 components:
   schemas:
@@ -165,3 +220,50 @@ components:
       type: array
       items:
         $ref: '#/components/schemas/Library'
+    LoginRequest:
+      type: object
+      properties:
+        username:
+          type: string
+        password:
+          type: string
+      required:
+        - username
+        - password
+    JwtResponse:
+      type: object
+      properties:
+        token:
+          type: string
+        id:
+          type: string
+        username:
+          type: string
+        email:
+          type: string
+        roles:
+          type: array
+          items:
+            type: string
+    SignupRequest:
+      type: object
+      properties:
+        username:
+          type: string
+        email:
+          type: string
+        password:
+          type: string
+        roles:
+          type: array
+          items:
+            type: string
+      required:
+        - username
+        - email
+        - password
+    MessageResponse:
+      type: object
+      properties:
+        message:
+          type: string
