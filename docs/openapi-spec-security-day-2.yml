@@ -1,0 +1,474 @@
+openapi: 3.0.3
+info:
+  title: Item Library API
+  version: 1.0.0
+servers:
+  - url: http://localhost:4000
+tags:
+  - name: items
+  - name: auth
+  - name: borrow
+
+paths:
+  /auth/signup:
+    post:
+      tags:
+        - auth
+      summary: User Signup
+      description: Register a new user.
+      operationId: userSignup
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SignupUser'
+      responses:
+        '201':
+          description: User created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessfullSignup'
+        '400':
+          description: User fields not correct
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadRequestError'
+
+  /auth/login:
+    post:
+      tags:
+        - auth
+      summary: User Login
+      description: Log in with username and password.
+      operationId: userLogin
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LoginUser'
+      responses:
+        '200':
+          description: Login successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UnauthorizedError'
+
+  /items:
+    get:
+      tags:
+        - items
+      summary: Get all items
+      description: Get a list of all items.
+      operationId: getAllItems
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AllItems'
+          description: Successful response
+
+    post:
+      tags:
+        - items
+      summary: Create a new item
+      description: Add a new item to the database.
+      operationId: createItem
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateItem'
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Item'
+          description: Item created successfully
+        '400':
+          description: Item fields not correct
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadRequestError'
+
+  /items/{itemId}:
+    delete:
+      tags:
+        - items
+      summary: Delete an item
+      description: Delete a specific item from the library.
+      operationId: deleteItem
+      parameters:
+        - name: itemId
+          in: path
+          description: The ID of the item to delete
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Item'
+          description: Item deleted successfully
+        '404':
+          description: Item not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotFoundError'
+
+    put:
+      tags:
+        - items
+      summary: Update an item
+      description: Update information about a specific item.
+      operationId: updateItem
+      parameters:
+        - name: itemId
+          in: path
+          description: The ID of the item to update
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateItem'
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Item'
+          description: Item updated successfully
+        '404':
+          description: Item not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotFoundError'
+        '400':
+          description: Item fields not correct
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadRequestError'
+
+  /borrow/users/{userId}/items/{itemId}:
+    post:
+      tags:
+        - borrow
+      summary: Borrow an item
+      description: Borrow a specific item for a specific user. <br>Path for USER is /borrow/items/{itemId} <br>userId is automatically picked up by using the token.
+      operationId: borrowItem
+      parameters:
+        - name: userId
+          in: path
+          description: The ID of the user borrowing the item
+          required: true
+          schema:
+            type: integer
+        - name: itemId
+          in: path
+          description: The ID of the item to be borrowed
+          required: true
+          schema:
+            type: integer
+      responses:
+        '201':
+          description: Item borrowed successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BorrowedItem'
+        '404':
+          description: User or item not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotFoundError'
+
+    put:
+      tags:
+        - borrow
+      summary: Return a borrowed item
+      description: Return a specific item that was borrowed by a user. <br>Path for USER is /borrow/items/{itemId} <br>userId is automatically picked up by using the token.
+      operationId: returnBorrowedItem
+      parameters:
+        - name: userId
+          in: path
+          description: The ID of the user returning the item
+          required: true
+          schema:
+            type: integer
+        - name: itemId
+          in: path
+          description: The ID of the item to be returned
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Item returned successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BorrowedItemReturned'
+        '404':
+          description: User or item not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotFoundError'
+
+  /borrow/users/{userId}:
+    get:
+      tags:
+        - borrow
+      summary: Get all currently borrowed items for a user
+      description: Get a list of all items ever borrowed by a specific user. <br>Path for USER is /borrow <br>userId is automatically picked up by using the token.
+      operationId: getAllBorrowUser
+      parameters:
+        - name: userId
+          in: path
+          description: The ID of the user borrowing the item
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Item returned successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BorrowedItemList'
+        '404':
+          description: User or item not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotFoundError'
+  /borrow/history/users/{userId}:
+    get:
+      tags:
+        - borrow
+      summary: Get all eralier borrowed items for a user
+      description: Get a list of all items ever borrowed by a specific user. <br>Path for USER is /borrow <br>userId is automatically picked up by using the token.
+      operationId: getAllBorrowUserHistory
+      parameters:
+        - name: userId
+          in: path
+          description: The ID of the user who borrowed the item
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Item returned successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BorrowedItemReturnedList'
+        '404':
+          description: User or item not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotFoundError'
+  /borrow/history/items/{itemId}:
+    get:
+      tags:
+        - borrow
+      summary: Get all borrowings for an item
+      description: Get a list of all item borrowings happened.
+      operationId: getAllBorrowItemHistory
+      parameters:
+        - name: itemId
+          in: path
+          description: The ID of the item to be borrowed
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Borrowed item returned successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BorrowedItemList'
+        '404':
+          description: User or item not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotFoundError'
+
+components:
+  schemas:
+    CreateItem:
+      type: object
+      required: [name, type, description]
+      properties:
+        name:
+          type: string
+          example: "ItemName"
+        type:
+          type: string
+          enum: ["BOOK", "CD", "DVD", "VIDEO_GAME", "BOARD_GAME"]
+          example: "VIDEO_GAME"
+        description:
+          type: string
+          example: "Description of the item"
+    Item:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        name:
+          type: string
+          example: "ItemName"
+        type:
+          type: string
+          enum: ["BOOK", "CD", "DVD", "VIDEO_GAME", "BOARD_GAME"]
+          example: "VIDEO_GAME"
+        description:
+          type: string
+          example: "Description of the item"
+    AllItems:
+      type: array
+      items:
+        $ref: '#/components/schemas/Item'
+    LoginUser:
+      type: object
+      required: [username, password]
+      properties:
+        username:
+          type: string
+          example: 'Gamer'
+        password:
+          type: string
+          example: 'securePassword'
+    SignupUser:
+      type: object
+      required: [username, email, password, roles]
+      properties:
+        username:
+          type: string
+          example: 'Gamer'
+        email:
+          type: string
+          format: email
+          example: "gamer@home.com"
+        password:
+          type: string
+          example: 'securePassword'
+        roles:
+          type: array
+          example: ["user", "mod"]
+    User:
+      type: object
+      properties:
+        token:
+          type: string
+          example: "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJkYXZlIiwiaWF0IjoxNzAwNDc4NjY5LCJleHAiOjE3MDA1NjUwNjl9.U6r5CGK8rkg2NFMWZjBorDR_rTuUHWHEtDk4kHr-4tU"
+        type:
+          type: string
+          example: "Bearer"
+        id:
+          type: integer
+          example: 10
+        username:
+          type: string
+          example: 'Gamer'
+        email:
+          type: string
+          format: email
+          example: "gamer@home.com"
+        roles:
+          type: array
+          example: ["ROLE_USER", "ROLE_MODERATOR"]
+    SuccessfullSignup:
+      type: object
+      properties:
+        message:
+          type: string
+          example: "User registered successfully"
+    UnauthorizedError:
+      type: object
+      properties:
+        message:
+          type: string
+          example: "Unauthorized"
+    BadRequestError:
+      type: object
+      properties:
+        message:
+          type: string
+          example: "bad request"
+    NotFoundError:
+      type: object
+      properties:
+        message:
+          type: string
+          example: "not found"
+    BorrowedItem:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        item:
+          type: string
+          example: "ItemName"
+        user:
+          type: string
+          example: "Gamer"
+        borrowDate:
+          type: string
+          format: date
+          example: "2024-01-01"
+        returnDate:
+          example: null
+    BorrowedItemReturned:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        item:
+          type: string
+          example: "ItemName"
+        user:
+          type: string
+          example: "Gamer"
+        borrowDate:
+          type: string
+          format: date
+          example: "2024-01-01"
+        returnDate:
+          type: string
+          format: date
+          example: "2024-02-14"
+    BorrowedItemReturnedList:
+      type: array
+      items:
+        $ref: '#/components/schemas/BorrowedItemReturned'
+    BorrowedItemList:
+      type: array
+      items:
+        $ref: '#/components/schemas/BorrowedItem'
