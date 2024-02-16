@@ -37,7 +37,7 @@ public class BorrowedItemController {
 
     @GetMapping
     public ResponseEntity<Response<?>> getAllCurrent(@RequestHeader (name="Authorization") String token) {
-        return this.getAllCurrentForUser(this.getUserIdFromToken(token.substring(7)));
+        return this.getAllCurrentForUser(this.getUserIdFromToken(token));
     }
 
     @GetMapping("/users/{userId}")
@@ -50,7 +50,7 @@ public class BorrowedItemController {
 
     @GetMapping("/history")
     public ResponseEntity<Response<?>> getAllHistory(@RequestHeader (name="Authorization") String token) {
-        return this.getAllHistoryForUser(this.getUserIdFromToken(token.substring(7)));
+        return this.getAllHistoryForUser(this.getUserIdFromToken(token));
     }
 
 
@@ -71,7 +71,7 @@ public class BorrowedItemController {
 
     @PostMapping("/items/{itemId}")
     public ResponseEntity<Response<?>> lendItem(@RequestHeader (name="Authorization") String token, @PathVariable int itemId) {
-        return this.lendItemForUser(this.getUserIdFromToken(token.substring(7)), itemId);
+        return this.lendItemForUser(this.getUserIdFromToken(token), itemId);
     }
 
     @PostMapping("/users/{userId}/items/{itemId}")
@@ -98,7 +98,7 @@ public class BorrowedItemController {
 
     @PutMapping("/items/{itemId}")
     public ResponseEntity<Response<?>> returnItem(@RequestHeader (name="Authorization") String token, @PathVariable int itemId) {
-        return this.returnItemForUser(this.getUserIdFromToken(token.substring(7)), itemId);
+        return this.returnItemForUser(this.getUserIdFromToken(token), itemId);
     }
 
     @PutMapping("/users/{userId}/items/{itemId}")
