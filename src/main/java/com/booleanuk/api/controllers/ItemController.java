@@ -135,6 +135,33 @@ public class ItemController {
 
     }
 
+    @PostMapping("/return/{itemId}")
+    public ResponseEntity<Item> returnItem(@PathVariable int itemId) {
+        Item item = this.itemRepository.findById((long) itemId).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+
+        if(item.getUser() == null){
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Item is not on loan");
+        }
+        int currentId = getCurrentUserId();
+        if(currentId < 0){
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Not logged in");
+        }
+        User user = this.userRepository.findById(currentId).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+
+        if(item.getUser().getId() != user.getId()){
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Item is not on loan to you");
+        }
+
+        item.setUser(null);
+        user.getItems().remove(item);
+
+        this.itemRepository.save(item);
+        this.userRepository.save(user);
+
+        return new ResponseEntity<>(item, HttpStatus.OK);
+
+    }
+
 
     private int getCurrentUserId() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
