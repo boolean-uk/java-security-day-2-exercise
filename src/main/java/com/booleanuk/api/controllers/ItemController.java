@@ -62,14 +62,13 @@ public class ItemController {
         itemToUpdate.setType(item.getType());
         itemToUpdate.setRented(item.isRented());
 
-        try {
-            itemToUpdate = this.itemRepository.save(itemToUpdate);
-        } catch (Exception e) {
-            ErrorResponse error = new ErrorResponse();
-            error.set("Bad request");
-            return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
-        }
+        this.itemRepository.save(itemToUpdate);
+        ItemResponse itemResponse = new ItemResponse();
+        itemResponse.set(itemToUpdate);
+        return ResponseEntity.ok(itemResponse);
+
     }
+
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Response<?>> deleteItem(@PathVariable int id) {
