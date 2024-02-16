@@ -1,0 +1,363 @@
+openapi: 3.1.0
+info:
+  title: Borrow Item API
+  description: API for user authentication and item borrowing
+  version: 1.0.0
+
+servers:
+  - url: http://localhost:4000
+
+paths:
+  /auth/login:
+    post:
+      summary: Authenticate user
+      tags:
+        - auth
+      description: Authenticate a user and generate a JWT token.
+      operationId: authenticateUser
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LoginRequest'
+      responses:
+        '200':
+          description: Successfully authenticated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/JwtResponse'
+        '400':
+          description: Bad request
+
+  /auth/signup:
+    post:
+      summary: Register user
+      tags:
+        - auth
+      description: Register a new user.
+      operationId: registerUser
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SignupRequest'
+      responses:
+        '200':
+          description: User registered successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MessageResponse'
+        '400':
+          description: Bad request
+
+  /items:
+    get:
+      summary: Get all items
+      tags:
+        - items
+      description: Get a list of all items.
+      operationId: getAllItems
+      responses:
+        '200':
+          description: Successfully returned a list of all items
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AllItems'
+
+    post:
+      summary: Add a new item
+      tags:
+        - items
+      description: Add a new item to the inventory.
+      operationId: addItem
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Item'
+      responses:
+        '201':
+          description: Successfully added a new item
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Item'
+        '400':
+          description: Bad request
+
+  /items/{id}:
+    get:
+      summary: Get item by ID
+      tags:
+        - items
+      description: Get details of a specific item by its ID.
+      operationId: getItemById
+      parameters:
+        - $ref: '#/components/parameters/ItemId'
+      responses:
+        '200':
+          description: Successfully returned item details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Item'
+        '404':
+          description: Item not found
+
+    put:
+      summary: Update item by ID
+      tags:
+        - items
+      description: Update details of a specific item by its ID.
+      operationId: updateItemById
+      parameters:
+        - $ref: '#/components/parameters/ItemId'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Item'
+      responses:
+        '200':
+          description: Successfully updated item details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Item'
+        '404':
+          description: Item not found
+
+    delete:
+      summary: Delete item by ID
+      tags:
+        - items
+      description: Delete a specific item by its ID.
+      operationId: deleteItemById
+      parameters:
+        - $ref: '#/components/parameters/ItemId'
+      responses:
+        '200':
+          description: Successfully deleted item
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Item'
+        '404':
+          description: Item not found
+
+  /items/{id}/history:
+    get:
+      summary: Get item borrowing history
+      operationId: getItemHistory
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Successfully retrieved item history
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/BorrowItem'
+        '404':
+          description: Item not found
+
+  /users/{id}/history:
+    get:
+      summary: Get user borrowing history
+      operationId: getUserHistory
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Successfully retrieved user history
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/BorrowItem'
+        '404':
+          description: User not found
+
+  /items/borrow:
+    post:
+      summary: Borrow an item
+      operationId: borrowItem
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BorrowRequest'
+      responses:
+        '201':
+          description: Successfully borrowed the item
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BorrowItem'
+        '404':
+          description: Item or user not found
+        '409':
+          description: Item is not available
+
+  /items/return:
+    post:
+      summary: Return a borrowed item
+      operationId: returnItem
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BorrowRequest'
+      responses:
+        '200':
+          description: Successfully returned the item
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BorrowItem'
+        '404':
+          description: Item or user not found
+
+
+components:
+  schemas:
+    LoginRequest:
+      type: object
+      properties:
+        username:
+          type: string
+        password:
+          type: string
+
+    SignupRequest:
+      type: object
+      properties:
+        username:
+          type: string
+        email:
+          type: string
+        password:
+          type: string
+        role:
+          type: array
+          items:
+            type: string
+
+    JwtResponse:
+      type: object
+      properties:
+        token:
+          type: string
+        id:
+          type: integer
+        username:
+          type: string
+        email:
+          type: string
+        roles:
+          type: array
+          items:
+            type: string
+
+    MessageResponse:
+      type: object
+      properties:
+        message:
+          type: string
+
+    Item:
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        type:
+          type: string
+
+    BorrowRequest:
+      type: object
+      properties:
+        itemId:
+          type: integer
+          example: 1
+        userId:
+          type: integer
+          example: 1
+
+    BorrowItem:
+      type: object
+      properties:
+        id:
+          type: integer
+        user:
+          $ref: '#/components/schemas/User'
+        item:
+          $ref: '#/components/schemas/Item'
+        startDate:
+          type: string
+          format: date-time
+        endDate:
+          type: string
+          format: date-time
+        active:
+          type: boolean
+
+    AllItems:
+      type: object
+      properties:
+        status:
+          type: string
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/Item'
+
+    User:
+      type: object
+      properties:
+        id:
+          type: integer
+        username:
+          type: string
+        email:
+          type: string
+          format: email
+      required:
+        - id
+        - username
+        - email
+
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
+  parameters:
+    ItemId:
+      name: id
+      in: path
+      required: true
+      schema:
+        type: integer
