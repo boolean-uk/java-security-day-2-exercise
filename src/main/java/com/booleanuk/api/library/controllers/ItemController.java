@@ -18,14 +18,14 @@ public class ItemController {
     private ItemRepository itemRepository;
 
     @GetMapping
-    public ResponseEntity<ItemListResponse> getAllBooks() {
+    public ResponseEntity<ItemListResponse> getAllItems() {
         ItemListResponse itemListResponse = new ItemListResponse();
         itemListResponse.set(this.itemRepository.findAll());
         return ResponseEntity.ok(itemListResponse);
     }
 
     @PostMapping
-    public ResponseEntity<Response<?>> createBook(@RequestBody Item book) {
+    public ResponseEntity<Response<?>> createItem(@RequestBody Item book) {
         ItemResponse itemResponse = new ItemResponse();
         try {
             itemResponse.set(this.itemRepository.save(book));
@@ -38,7 +38,7 @@ public class ItemController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Response<?>> getBookById(@PathVariable int id) {
+    public ResponseEntity<Response<?>> getItemById(@PathVariable int id) {
         Item item = this.itemRepository.findById(id).orElse(null);
         if (item == null) {
             ErrorResponse error = new ErrorResponse();
@@ -51,7 +51,7 @@ public class ItemController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Response<?>> updateBook(@PathVariable int id, @RequestBody Item request) {
+    public ResponseEntity<Response<?>> updateItem(@PathVariable int id, @RequestBody Item request) {
         Item item = this.itemRepository.findById(id).orElse(null);
         if (item == null) {
             ErrorResponse error = new ErrorResponse();
@@ -75,7 +75,7 @@ public class ItemController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Response<?>> deleteBook(@PathVariable int id) {
+    public ResponseEntity<Response<?>> deleteItem(@PathVariable int id) {
         Item item = this.itemRepository.findById(id).orElse(null);
         if (item == null) {
             ErrorResponse error = new ErrorResponse();
