@@ -6,6 +6,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface BorrowedItemRepository extends JpaRepository<BorrowedItem, Integer> {
     @Query("SELECT new com.booleanuk.api.dto.BorrowedItemDto(b.id, i.name, u.username, b.borrowDate, b.returnDate) " +
@@ -29,7 +30,5 @@ public interface BorrowedItemRepository extends JpaRepository<BorrowedItem, Inte
             "WHERE u.id = :userId AND b.returnDate IS NOT NULL")
     List<BorrowedItemDto> findPreviouslyBorrowedItemsByUserId(int userId);
 
-    // Get game if it is currently lent out
-    @Query("SELECT b FROM BorrowedItem b JOIN b.item i WHERE i.id = :itemId AND b.returnDate IS NULL")
-    List<BorrowedItem> findIsBorrowedByItemId(int itemId);
+    List<BorrowedItem> findByUserIdAndItemId(int userId, int itemId);
 }
