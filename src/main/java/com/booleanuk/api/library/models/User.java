@@ -37,6 +37,7 @@ public class User {
     private String email;
 
     @NotBlank
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String password;
     
     @ManyToMany(fetch = FetchType.LAZY)

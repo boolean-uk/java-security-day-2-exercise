@@ -17,7 +17,7 @@ paths:
     post:
       tags:
         - items
-      summary: Create a item
+      summary: Create an item
       description: Create a new item.
       operationId: createItem
       requestBody:
@@ -55,7 +55,7 @@ paths:
     put:
       tags:
         - items
-      summary: Update a item
+      summary: Update an item
       description: Update an existing item. Any combination of fields may be provided.
       operationId: updateItem
       parameters:
@@ -92,7 +92,7 @@ paths:
     delete:
       tags:
         - items
-      summary: Delete a item
+      summary: Delete an item
       description: Delete an existing item.
       operationId: deleteItem
       parameters:
@@ -295,8 +295,8 @@ paths:
     get:
       tags:
         - loans
-      summary: Get all loans of a item
-      description: Get a list of every loan for a item.
+      summary: Get all loans of an item
+      description: Get a list of every loan for an item.
       operationId: getItemLoans
       parameters:
         - name: id

@@ -16,6 +16,7 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.access.expression.WebExpressionAuthorizationManager;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.http.HttpMethod;
 
@@ -61,8 +62,12 @@ public class WebSecurityConfig {
                 .sessionManagement((session) -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests((requests) -> requests
                         .requestMatchers("/auth/**").permitAll()
-                        .requestMatchers(HttpMethod.GET, "/items/**").hasRole("USER")
-                        .requestMatchers("/loans/**", "/items/**", "/users/**").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.GET, "/items").hasRole("USER")
+                        .requestMatchers(HttpMethod.POST, "/users/{name}/items/{itemId}").access(new WebExpressionAuthorizationManager("#name == authentication.name and hasRole('USER')"))
+                        .requestMatchers(HttpMethod.PUT, "/{name}/loans/{id}").access(new WebExpressionAuthorizationManager("#name == authentication.name and hasRole('USER')"))
+                        .requestMatchers(HttpMethod.GET, "/users/{name}/loans").access(new WebExpressionAuthorizationManager("#name == authentication.name and hasRole('USER') or hasRole('ADMIN')"))
+                        .requestMatchers("/items/**").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.GET, "/items/{itemId}/loans").hasRole("ADMIN")
                 );
         http.authenticationProvider(authenticationProvider());
         http.addFilterBefore(authenticationJwtTokenFilter(), UsernamePasswordAuthenticationFilter.class);

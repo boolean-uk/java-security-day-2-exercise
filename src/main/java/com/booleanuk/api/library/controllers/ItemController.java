@@ -61,7 +61,7 @@ public class ItemController {
             itemToUpdate.setType(item.getType());
         }
         
-        return ResponseEntity.status(HttpStatus.CREATED).body(new SuccessResponse<>(itemToUpdate));
+        return ResponseEntity.status(HttpStatus.CREATED).body(new SuccessResponse<>(itemRepository.save(itemToUpdate)));
     }
 
     private Item findItem(int id) {
