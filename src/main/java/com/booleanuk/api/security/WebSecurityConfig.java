@@ -6,6 +6,7 @@ import com.booleanuk.api.security.services.UserDetailsServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
@@ -24,7 +25,7 @@ public class WebSecurityConfig {
     UserDetailsServiceImpl userDetailsService;
 
     @Autowired
-    private AuthEntryPointJwt unauthorisedHandler;
+    private AuthEntryPointJwt unauthorizedHandler;
 
     @Bean
     public AuthTokenFilter authenticationJwtTokenFilter() {
@@ -54,11 +55,12 @@ public class WebSecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
                 .csrf((csrf) -> csrf.disable())
-                .exceptionHandling((exception) -> exception.authenticationEntryPoint((this.unauthorisedHandler)))
+                .exceptionHandling((exception) -> exception.authenticationEntryPoint((this.unauthorizedHandler)))
                 .sessionManagement((session) -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests((requests) -> requests
                         .requestMatchers("/auth/**").permitAll()
-                        .requestMatchers("/items", "/items/**", "/users", "/users/**", "/borrow", "/borrow/**").permitAll()//.authenticated()
+                        .requestMatchers("/borrow", "/borrow/history", "/borrow/items/*").hasRole("USER")
+                        .requestMatchers("/items", "/items/**", "/borrow/users/**", "/borrow/history/**").hasRole("ADMIN")
                 );
         http.authenticationProvider(this.authenticationProvider());
         http.addFilterBefore(this.authenticationJwtTokenFilter(), UsernamePasswordAuthenticationFilter.class);
