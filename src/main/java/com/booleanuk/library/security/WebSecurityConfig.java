@@ -59,7 +59,7 @@ public class WebSecurityConfig {
                 .authorizeHttpRequests((requests) -> requests
                         .requestMatchers("/auth/**").permitAll()
                         .requestMatchers(HttpMethod.GET,"/items","/items/**").hasRole("USER")
-                        .requestMatchers("/items/").hasRole("MODERATOR")
+                        .requestMatchers("/items", "/items/**").hasRole("MODERATOR")
                 );
         http.authenticationProvider(this.authenticationProvider());
         http.addFilterBefore(authenticationJwtTokenFilter(), UsernamePasswordAuthenticationFilter.class);
