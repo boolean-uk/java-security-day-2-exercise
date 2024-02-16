@@ -169,7 +169,7 @@ components:
           type: array
           items:
             type: string
-            example: {"admin", "user"}
+            example: "admin"
     Signin:
       type: object
       properties:
@@ -179,6 +179,7 @@ components:
         password:
           type: string
           example: "password"
+
     Registered:
       type: object
       properties:
@@ -210,7 +211,7 @@ components:
           type: array
           items:
             type: string
-            example: { "ROLE_ADMIN", "ROLE_USER" }
+            example: "ROLE_ADMIN", "ROLE_USER"
     Item:
       type: object
       properties:

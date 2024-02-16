@@ -19,5 +19,7 @@ public class Item {
     @Column
     private String type;
 
-    
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User userBorrowing;
 }

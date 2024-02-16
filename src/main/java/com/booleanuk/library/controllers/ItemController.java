@@ -1,21 +1,30 @@
 package com.booleanuk.library.controllers;
 
 import com.booleanuk.library.models.Item;
+import com.booleanuk.library.models.User;
 import com.booleanuk.library.payload.response.ItemListResponse;
 import com.booleanuk.library.payload.response.ItemResponse;
 import com.booleanuk.library.payload.response.ErrorResponse;
 import com.booleanuk.library.payload.response.Response;
 import com.booleanuk.library.repository.ItemRepository;
+import com.booleanuk.library.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("items")
 public class ItemController {
     @Autowired
     private ItemRepository itemRepository;
+
+    @Autowired
+    private UserRepository userRepository;
 
     @GetMapping
     public ResponseEntity<ItemListResponse> getAllBooks() {
@@ -37,18 +46,7 @@ public class ItemController {
         return new ResponseEntity<>(itemResponse, HttpStatus.CREATED);
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<Response<?>> getBookById(@PathVariable int id) {
-        Item item = this.itemRepository.findById(id).orElse(null);
-        if (item == null) {
-            ErrorResponse error = new ErrorResponse();
-            error.set("not found");
-            return new ResponseEntity<>(error, HttpStatus.NOT_FOUND);
-        }
-        ItemResponse itemResponse = new ItemResponse();
-        itemResponse.set(item);
-        return ResponseEntity.ok(itemResponse);
-    }
+    @GetMapping("bookings")
 
     @PutMapping("/{id}")
     public ResponseEntity<Response<?>> updateBook(@PathVariable int id, @RequestBody Item item) {

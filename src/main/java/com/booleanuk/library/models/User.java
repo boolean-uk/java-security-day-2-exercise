@@ -1,5 +1,6 @@
 package com.booleanuk.library.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
@@ -8,6 +9,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @NoArgsConstructor
@@ -34,7 +36,11 @@ public class User {
 
     @NotBlank
     @Size(max = 120)
+    @JsonIgnore
     private String password;
+
+    @OneToMany(mappedBy= "userBorrowing")
+    private List<Item> borrowedItems;
 
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "user_roles",
@@ -46,5 +52,9 @@ public class User {
         this.username = username;
         this.email = email;
         this.password = password;
+    }
+
+    public User(int id) {
+        this.id = id;
     }
 }

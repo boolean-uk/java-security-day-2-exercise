@@ -5,6 +5,7 @@ import com.booleanuk.library.models.Role;
 import com.booleanuk.library.models.User;
 import com.booleanuk.library.payload.request.LoginRequest;
 import com.booleanuk.library.payload.request.SignupRequest;
+import com.booleanuk.library.payload.response.ErrorResponse;
 import com.booleanuk.library.payload.response.JwtResponse;
 import com.booleanuk.library.payload.response.MessageResponse;
 import com.booleanuk.library.repository.RoleRepository;
@@ -56,6 +57,7 @@ public class AuthController {
         UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
         List<String> roles = userDetails.getAuthorities().stream().map((item) -> item.getAuthority())
                 .collect(Collectors.toList());
+
         return ResponseEntity
                 .ok(new JwtResponse(jwt, userDetails.getId(), userDetails.getUsername(), userDetails.getEmail(), roles));
     }
