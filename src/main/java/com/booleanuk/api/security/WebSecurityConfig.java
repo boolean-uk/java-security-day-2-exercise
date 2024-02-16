@@ -60,8 +60,11 @@ public class WebSecurityConfig {
                 .authorizeHttpRequests((requests) -> requests
                         .requestMatchers("/auth/**").permitAll()
                         // Allow base users to access GET mappings
-                        .requestMatchers(HttpMethod.GET,"/items/**").hasRole("USER")
-                        .requestMatchers("/items/**").hasRole("MODERATOR")
+                        .requestMatchers(HttpMethod.GET,"/items", "/items/*").hasRole("USER")
+                        // FIXME Any user can borrow and return for any user right now
+                        .requestMatchers(HttpMethod.POST,"/items/borrow", "/items/return").hasRole("USER")
+                        .requestMatchers("/items/**").hasRole("ADMIN")
+                        .requestMatchers("/users/**").hasRole("ADMIN")
                 );
         http.authenticationProvider(authenticationProvider());
         http.addFilterBefore(authenticationJwtTokenFilter(), UsernamePasswordAuthenticationFilter.class);

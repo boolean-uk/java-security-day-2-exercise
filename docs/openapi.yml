@@ -152,6 +152,93 @@ paths:
         '404':
           description: Item not found
 
+  /items/{id}/history:
+    get:
+      summary: Get item borrowing history
+      operationId: getItemHistory
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Successfully retrieved item history
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/BorrowItem'
+        '404':
+          description: Item not found
+
+  /users/{id}/history:
+    get:
+      summary: Get user borrowing history
+      operationId: getUserHistory
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Successfully retrieved user history
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/BorrowItem'
+        '404':
+          description: User not found
+
+  /items/borrow:
+    post:
+      summary: Borrow an item
+      operationId: borrowItem
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BorrowRequest'
+      responses:
+        '201':
+          description: Successfully borrowed the item
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BorrowItem'
+        '404':
+          description: Item or user not found
+        '409':
+          description: Item is not available
+
+  /items/return:
+    post:
+      summary: Return a borrowed item
+      operationId: returnItem
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BorrowRequest'
+      responses:
+        '200':
+          description: Successfully returned the item
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BorrowItem'
+        '404':
+          description: Item or user not found
+
+
 components:
   schemas:
     LoginRequest:
@@ -208,6 +295,34 @@ components:
         type:
           type: string
 
+    BorrowRequest:
+      type: object
+      properties:
+        itemId:
+          type: integer
+          example: 1
+        userId:
+          type: integer
+          example: 1
+
+    BorrowItem:
+      type: object
+      properties:
+        id:
+          type: integer
+        user:
+          $ref: '#/components/schemas/User'
+        item:
+          $ref: '#/components/schemas/Item'
+        startDate:
+          type: string
+          format: date-time
+        endDate:
+          type: string
+          format: date-time
+        active:
+          type: boolean
+
     AllItems:
       type: object
       properties:
@@ -217,6 +332,27 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/Item'
+
+    User:
+      type: object
+      properties:
+        id:
+          type: integer
+        username:
+          type: string
+        email:
+          type: string
+          format: email
+      required:
+        - id
+        - username
+        - email
+
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
 
   parameters:
     ItemId:
