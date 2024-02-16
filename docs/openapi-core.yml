@@ -1,0 +1,220 @@
+openapi: 3.1.0
+info:
+  title: Java API Security Day 2 - Core Criteria
+  description: Core Criteria for the Java Security
+  version: 0.2.3
+  contact:
+    name: Security Day 2
+
+servers:
+  - url: http://localhost:4000
+tags:
+  - name: items
+  - name: signin
+  - name: signup
+paths:
+  /items:
+    post:
+      tags:
+        - items
+      summary: Create an item
+      description: Create a new item.
+      operationId: createItem
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateItem'
+      responses:
+        '201':
+          description: Successfully created a new item
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Item'
+    get:
+      tags:
+        - items
+      summary: Get all item
+      description: Get a list of every item.
+      operationId: getAllItems
+      responses:
+        '200':
+          description: Get a list of all items
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AllItems'
+  /items/{id}:
+    put:
+      tags:
+        - items
+      summary: Update an item
+      description: Update an existing item
+      operationId: updateItem
+      parameters:
+        - name: id
+          in: path
+          description: The ID of the item to update
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateItem'
+      responses:
+        '201':
+          description: Successfully updated the specified item
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Item'
+    delete:
+      tags:
+        - items
+      summary: Delete a item
+      description: Delete an existing item
+      operationId: deleteItem
+      parameters:
+        - name: id
+          in: path
+          description: The ID of the item to delete
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Successfully deleted the specified item
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Item'
+
+
+  /auth/signin:
+    post:
+      tags:
+        - authentication
+      summary: Authenticate User
+      description: Authenticates a user and returns a JWT token
+      operationId: authenticateUser
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LoginRequest'
+      responses:
+        '200':
+          description: Successful authentication
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/JwtResponse'
+        '401':
+          description: Unauthorized - Invalid credentials
+
+  /auth/signup:
+    post:
+      tags:
+        - authentication
+      summary: Register User
+      description: Registers a new user
+      operationId: registerUser
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SignupRequest'
+      responses:
+        '200':
+          description: User registered successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MessageResponse'
+        '400':
+          description: Bad Request - Username or email already taken
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MessageResponse'
+
+
+components:
+  schemas:
+    CreateItem:
+      type: object
+      required: [title, type]
+      properties:
+        title:
+          type: string
+          example: "Chess"
+        type:
+          type: string
+          example: "Board game"
+    Item: # Corrected indentation, now Item is not nested under CreateItem
+      type: object
+      properties:
+        id:
+          type: integer
+        title:
+          type: string
+        type:
+          type: string
+        isRented:
+          type: boolean
+    AllItems:
+      type: array
+      items:
+        $ref: '#/components/schemas/Item'
+    LoginRequest:
+      type: object
+      properties:
+        username:
+          type: string
+        password:
+          type: string
+      required:
+        - username
+        - password
+    JwtResponse:
+      type: object
+      properties:
+        token:
+          type: string
+        id:
+          type: string
+        username:
+          type: string
+        email:
+          type: string
+        roles:
+          type: array
+          items:
+            type: string
+    SignupRequest:
+      type: object
+      properties:
+        username:
+          type: string
+        email:
+          type: string
+        password:
+          type: string
+        roles:
+          type: array
+          items:
+            type: string
+      required:
+        - username
+        - email
+        - password
+    MessageResponse:
+      type: object
+      properties:
+        message:
+          type: string
