@@ -64,6 +64,7 @@ public class WebSecurityConfig {
                         .requestMatchers(HttpMethod.POST, "/items", "/items/**").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.PUT, "/items", "/items/**").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.DELETE, "/items", "/items/**").hasRole("ADMIN")
+                        .requestMatchers("/items/borrow/*").hasRole("USER")
                 );
         http.authenticationProvider(this.authenticationProvider());
         http.addFilterBefore(authenticationJwtTokenFilter(), UsernamePasswordAuthenticationFilter.class);

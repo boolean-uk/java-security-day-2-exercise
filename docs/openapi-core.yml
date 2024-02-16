@@ -9,9 +9,6 @@ info:
 servers:
   - url: http://localhost:4000
 
-security:
-  - jwt: []
-
 tags:
   - name: users
   - name: items
@@ -63,9 +60,6 @@ paths:
         - items
       summary: Create an item
       description: Create a new item
-      security:
-        - jwt:
-            - ADMIN
       operationId: createItem
       requestBody:
         content:
@@ -119,9 +113,6 @@ paths:
         - items
       summary: Update an item
       description: Update an existing item. For ease of implementation, all fields are required from the client.
-      security:
-        - jwt:
-            - ADMIN
       operationId: updateItem
       parameters:
         - name: id
