@@ -60,10 +60,14 @@ public class WebSecurityConfig {
                 .sessionManagement((session) -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests((requests) -> requests
                         .requestMatchers("/auth/**").permitAll()
-                        .requestMatchers(HttpMethod.GET,"/items", "/items/*", "/itemLoans").authenticated()
+                        .requestMatchers(HttpMethod.GET,"/items", "/items/*").authenticated()
                         .requestMatchers(HttpMethod.POST, "/items").hasAuthority("ROLE_MODERATOR")
                         .requestMatchers(HttpMethod.DELETE, "/items").hasAuthority("ROLE_MODERATOR")
-                        .requestMatchers(HttpMethod.POST, "/itemLoans/**").hasAuthority("ROLE_MODERATOR")
+                        .requestMatchers(HttpMethod.PUT, "/items").hasAuthority("ROLE_MODERATOR")
+                        .requestMatchers(HttpMethod.GET, "/itemLoans/**").authenticated()
+                        .requestMatchers(HttpMethod.POST, "/itemLoans/**").authenticated()
+                        .requestMatchers(HttpMethod.DELETE, "/itemLoans/**").authenticated()
+                        .requestMatchers(HttpMethod.PUT, "/itemLoans/**").hasAuthority("ROLE_MODERATOR")
                 );
         http.authenticationProvider(authenticationProvider());
         http.addFilterBefore(authenticationJwtTokenFilter(), UsernamePasswordAuthenticationFilter.class);

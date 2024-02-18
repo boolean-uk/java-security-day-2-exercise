@@ -16,7 +16,7 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/itemloans")
+@RequestMapping("/itemLoans")
 public class ItemLoanController {
 
     @Autowired
@@ -54,20 +54,20 @@ public class ItemLoanController {
         return new ResponseEntity<>(customResponse, HttpStatus.OK);
     }
 
-    @PostMapping("/users/{id}/items/{itemId}")
-    public ResponseEntity<CustomResponse> createGameLoan(@PathVariable int id, @PathVariable int gameId, @RequestBody ItemLoan itemLoan) {
-        if(!userRepository.existsById(id) || !itemRepository.existsById(gameId)) {
+    @PostMapping("/{userId}/items/{itemId}")
+    public ResponseEntity<CustomResponse> createItemLoan(@PathVariable int userId, @PathVariable int itemId) {
+        if(!userRepository.existsById(userId) || !itemRepository.existsById(itemId)) {
             return new ResponseEntity<>(new CustomResponse("error", "not found"), HttpStatus.NOT_FOUND);
         }
 
         User user = userRepository
-                .findById(gameId).get();
-        itemLoan.setUser(user);
-
+                .findById(userId).get();
         Item item = itemRepository
-                .findById(gameId).get();
-        itemLoan.setItem(item);
+                .findById(itemId).get();
 
+        ItemLoan itemLoan = new ItemLoan();
+        itemLoan.setUser(user);
+        itemLoan.setItem(item);
         itemLoanRepository.save(itemLoan);
 
         return new ResponseEntity<>(new CustomResponse("success", itemLoanRepository.findById(itemLoan.getId())), HttpStatus.OK);
