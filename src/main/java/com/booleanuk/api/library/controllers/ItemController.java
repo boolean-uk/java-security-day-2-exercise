@@ -1,8 +1,6 @@
 package com.booleanuk.api.library.controllers;
 
-import com.booleanuk.api.library.models.Item;
-import com.booleanuk.api.library.models.Loan;
-import com.booleanuk.api.library.models.User;
+import com.booleanuk.api.library.models.*;
 import com.booleanuk.api.library.payload.response.ErrorResponse;
 import com.booleanuk.api.library.payload.response.ItemListResponse;
 import com.booleanuk.api.library.payload.response.ItemResponse;
@@ -18,6 +16,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 
@@ -179,7 +178,49 @@ public class ItemController {
 
         ItemResponse itemResponse = new ItemResponse();
         itemResponse.set(item);
+
         return ResponseEntity.ok(itemResponse);
+    }
+
+    //getCurrent
+
+    @GetMapping("/getCurrent")
+    public ResponseEntity<?> getCurrentItems(@AuthenticationPrincipal UserDetails userDetails) {
+
+        Optional<User> userOptional = userRepository.findByUsername(userDetails.getUsername());
+        User user = userOptional.orElseThrow(() -> new NoSuchElementException("User not found"));
+
+        List<Item> currentItems = user.getCurrentlyBorrowedItems();
+        ItemListResponse itemListResponse= new ItemListResponse();
+        itemListResponse.set(currentItems);
+
+        return ResponseEntity.ok(itemListResponse);
+    }
+
+    //getCurrentbyID
+
+    @GetMapping("/getCurrent/users/{userId}")
+    public ResponseEntity<?> getCurrentItemsbyId(@PathVariable int userId) {
+
+        User user = this.userRepository.findById(userId).orElse(null);
+        if (user == null){
+            ErrorResponse error = new ErrorResponse();
+            error.set("No User with that id were found");
+            return new ResponseEntity<>(error, HttpStatus.NOT_FOUND);
+        }
+        for (Role role : user.getRoles()){
+            if(role.getName() == ERole.ROLE_USER){
+                List<Item> currentItems = user.getCurrentlyBorrowedItems();
+                ItemListResponse itemListResponse= new ItemListResponse();
+                itemListResponse.set(currentItems);
+
+                return ResponseEntity.ok(itemListResponse);
+            }
+        }
+
+        ErrorResponse error = new ErrorResponse();
+        error.set("No User with that id were found");
+        return new ResponseEntity<>(error, HttpStatus.NOT_FOUND);
     }
 
     private Item getAnItem(int id){
@@ -188,13 +229,13 @@ public class ItemController {
 
     private ResponseEntity<Response<?>> badRequest(){
         ErrorResponse error = new ErrorResponse();
-        error.set("Could not create User, please check all required fields are correct");
+        error.set("Could not create Item, please check all required fields are correct");
         return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
     }
 
     private ResponseEntity<Response<?>> notFound(){
         ErrorResponse error = new ErrorResponse();
-        error.set("No User with that id were found");
+        error.set("No Item with that id were found");
         return new ResponseEntity<>(error, HttpStatus.NOT_FOUND);
     }
 }
