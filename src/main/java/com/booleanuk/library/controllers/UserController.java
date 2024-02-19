@@ -21,7 +21,7 @@ public class UserController {
     @GetMapping
     public ResponseEntity<UserListResponse> getAllUsers() {
         UserListResponse response = new UserListResponse();
-        // Assuming UserListResponse is properly set up to handle User entities including their loans
+
         response.set(userRepository.findAll());
         return ResponseEntity.ok(response);
     }
@@ -35,8 +35,7 @@ public class UserController {
             return new ResponseEntity<>(error, HttpStatus.NOT_FOUND);
         }
         UserResponse userResponse = new UserResponse();
-        // Assuming UserResponse is properly set up to handle User entity including their loans
-        userResponse.set(user);
+       userResponse.set(user);
         return ResponseEntity.ok(userResponse);
     }
 
