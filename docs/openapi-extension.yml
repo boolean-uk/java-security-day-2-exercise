@@ -9,8 +9,116 @@ servers:
   - url: http://localhost:4000
 tags:
   - name: items
-
+  - name: loans
+  - name: authentication
 paths:
+  /loans:
+    get:
+      tags:
+        - loans
+      summary: Get loans
+      description: Get all of the loans in the list
+      operationId: getLoans
+      responses:
+        '200':
+          description: Successfully returned a list of all loans
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AllItems'
+
+
+  /loans/item/{id}/history:
+    get:
+      tags:
+        - loans
+      summary: Get a list of loans
+      description: Get a list of loan history from item by id
+      operationId: getItemLoans
+      parameters:
+        - name: id
+          in: path
+          description: The ID of the item to retrieve
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Get the loansHistory from the item given its ID
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AllLoan'
+  /loans/user/{id}/history:
+    get:
+      tags:
+        - loans
+      summary: Get a list of loans
+      description: Get a list of loan history from user by id
+      operationId: getUserLoans
+      parameters:
+        - name: id
+          in: path
+          description: The ID of the item to retrieve
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Get the loansHistory from the user given its ID
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AllLoan'
+  /loans/user/{id}/item/{itemId}:
+    post:
+      tags:
+        - loans
+      summary: Create a loan
+      description: Create a loan using user id and item id
+      operationId: createLoan
+      parameters:
+        - name: id
+          in: path
+          description: The ID of the user
+          required: true
+          schema:
+            type: integer
+        - name: itemId
+          in: path
+          description: The ID of the item
+          required: true
+          schema:
+            type: integer
+      responses:
+        '201':
+          description: Create a loan
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreateLoan'
+  /loans/{id}:
+    delete:
+      tags:
+        - loans
+      summary: Delete a loan
+      description: Delete a Loan by id
+      operationId: deleteLoan
+      parameters:
+        - name: id
+          in: path
+          description: The ID of the loan to remove
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Delete a loan
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Loan'
+
   /items:
     post:
       tags:
@@ -29,7 +137,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Item'
+                $ref: '#/components/schemas/CreateItem'
         '401':
           description: Unauthorized access
 
@@ -46,6 +154,8 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/AllItems'
+
+
   /items/{id}:
     put:
       tags:
@@ -71,7 +181,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/item'
+                $ref: '#/components/schemas/Item'
         '401':
           description: Unauthorized access
 
@@ -220,34 +330,34 @@ components:
       type: array
       items:
         $ref: '#/components/schemas/Item'
-    Library:
+    CreateLoan:
+      type: object
+      required: [ title ]
+      properties:
+        title:
+          type: string
+          example: "title"
+    Loan:
       type: object
       properties:
         id:
           type: integer
           example: 1
-        type:
-          type: string
-          example: "type"
         title:
           type: string
           example: "title"
-        author:
+        createdAt:
           type: string
-          example: "author"
-        publisher:
+          format: DateTime
+          example: "2023-03-14T11:01:56.633+00:00"
+        updatedAt:
           type: string
-          example: "publisher"
-        year:
-          type: integer
-          example: 1
-        genre:
-          type: string
-          example: "genre"
-    AllLibraries:
+          format: DateTime
+          example: "2023-03-14T11:01:56.633+00:00"
+    AllLoan:
       type: array
       items:
-        $ref: '#/components/schemas/Library'
+        $ref: '#/components/schemas/Loan'
     LoginRequest:
       type: object
       properties:
@@ -269,7 +379,7 @@ components:
           type: string
         email:
           type: string
-        roles:
+        role:
           type: array
           items:
             type: string
@@ -282,10 +392,11 @@ components:
           type: string
         password:
           type: string
-        roles:
+        role:
           type: array
           items:
             type: string
+            example: "admin"
       required:
         - username
         - email

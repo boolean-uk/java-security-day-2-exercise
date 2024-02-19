@@ -1,5 +1,6 @@
 package com.booleanuk.library.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
@@ -8,6 +9,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @NoArgsConstructor
@@ -40,9 +42,22 @@ public class User {
     @JoinTable(name = "user_roles", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
     private Set<Role> roles = new HashSet<>();
 
+    @OneToMany(mappedBy = "user")
+    @JsonIgnoreProperties(value = "user")
+    private List<Loan> loans;
+
+    @OneToMany(mappedBy = "user")
+    @JsonIgnoreProperties(value = "user")
+    private List<Loan> loansHistory;
+
     public User(String username, String email, String password) {
         this.username = username;
         this.email = email;
         this.password = password;
+    }
+
+
+    public User(int id) {
+        this.id = id;
     }
 }
