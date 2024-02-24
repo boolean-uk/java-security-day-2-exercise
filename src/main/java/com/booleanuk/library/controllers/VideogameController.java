@@ -5,7 +5,10 @@ import com.booleanuk.library.payload.response.ErrorResponse;
 import com.booleanuk.library.payload.response.Response;
 import com.booleanuk.library.payload.response.VideogameListResponse;
 import com.booleanuk.library.payload.response.VideogameResponse;
+import com.booleanuk.library.repository.UserRepository;
 import com.booleanuk.library.repository.VideogameRespository;
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Jwts;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,13 +20,32 @@ public class VideogameController {
     @Autowired
     private VideogameRespository videogameRespository;
 
+    @Autowired
+    private UserRepository userRepository;
+
     @GetMapping
-    public ResponseEntity<VideogameListResponse> getAllVideogames() {
+    public ResponseEntity<?> getAllVideogames(@RequestHeader("Authorization") String token) {
+        //Från header token få ut användares roll
+        /**
+         * The final token will have a structure that looks like xxxxx.yyyyy.zzzzz
+         *
+         * The three pieces are:
+         *
+         * Header (xxxxx)
+         * Payload (yyyyy)
+         * Signature (zzzzz)
+         *
+         * String[] tokenInThreeParts = token.split(".");
+         *         String header = tokenInThreeParts[0];
+         */
+
+
         VideogameListResponse videogameListResponse = new VideogameListResponse();
 
         videogameListResponse.set(this.videogameRespository.findAll());
 
         return ResponseEntity.ok(videogameListResponse);
+
     }
 
     @GetMapping("/{id}")

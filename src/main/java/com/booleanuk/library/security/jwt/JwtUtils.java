@@ -38,7 +38,7 @@ public class JwtUtils {
         return Keys.hmacShaKeyFor(Decoders.BASE64.decode(jwtSecret));
     }
 
-    public String getUsernameFromJwtToken(String token) {   //if we have a token,use the key to get the name of the user
+    public String getUsernameFromJwtToken(String token) {   //if we have a token,use the key to return the name of the user
         return Jwts.parserBuilder().setSigningKey(key())
                 .build().parseClaimsJws(token).getBody().getSubject();
     }

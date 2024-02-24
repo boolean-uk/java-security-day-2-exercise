@@ -6,6 +6,7 @@ import com.booleanuk.library.security.services.UserDetailsServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
@@ -59,12 +60,17 @@ public class WebSecurityConfig {
                 .exceptionHandling((exception) -> exception.authenticationEntryPoint(this.unauthorisedHandler))
                 .sessionManagement((session) -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)) //Stateless = doesn't depend on previous things
                 .authorizeHttpRequests((requests) -> requests
-                        .requestMatchers("/auth/**").permitAll()
-                        .requestMatchers("/books", "/books/**").authenticated()
+                        .requestMatchers("/auth/**").permitAll()   //anyone can sign in
+                        .requestMatchers(HttpMethod.GET, "/books/**", "/videogames/**").hasRole("USER") //only signed in users can do get requests
+                        .requestMatchers("/books/**", "/videogames/**").hasRole("ADMIN") //only admin can do post, put, delete
+                        .anyRequest().authenticated()   //authenticate for any other requests
                 );
+
         http.authenticationProvider(this.authenticationProvider());
+
         http.addFilterBefore(authenticationJwtTokenFilter(),
-                UsernamePasswordAuthenticationFilter.class);  //check if the token is there and valid, then we're good to go and don't need to do the other stuff
+                UsernamePasswordAuthenticationFilter.class);  //check if the token is there and valid, then we're good to go
+
         return http.build();
     }
 }
