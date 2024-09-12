@@ -17,6 +17,6 @@ You are going to build on the activity that you worked on yesterday. You need to
 
 ## Extension Activity
 
-Extend the core functionality so that normal users can borrow and return items from the library, they should be able to book items out and return them via the API. They should also be able to see a list of their current items and a history of previously borrowed items. Admin users should additionally be able to see the history of items borrowed for any normal user, and what items they currently have on loan. They should also be able to view the history of who has borrowed a given item. As well as building the end points for this also create an OpenAPI spec for this.
+Extend the core functionality so that normal users can borrow and return items from the library, they should be able to item items out and return them via the API. They should also be able to see a list of their current items and a history of previously borrowed items. Admin users should additionally be able to see the history of items borrowed for any normal user, and what items they currently have on loan. They should also be able to view the history of who has borrowed a given item. As well as building the end points for this also create an OpenAPI spec for this.
 
 
