@@ -1,0 +1,208 @@
+openapi: 3.1.0
+info:
+  title: Java Authentication/Security, Day 2 - Core Criteria
+  description: Core Criteria for Java Spring Authentication
+  version: 0.0.1
+  contact:
+    name: Java Authentication Part 2 Exercise
+
+servers:
+  - url: http://localhost:4000
+tags:
+  - name: videogames
+paths:
+  /videogames:
+    post:
+      tags:
+        - videogames
+      summary: Create videogame
+      description: Create a new Videogame
+      operationId: createVideogame
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateVideogame'
+      responses:
+        '201':
+          description: Successfully created a new videogame
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Videogame'
+        '400':
+          description: "Could not create/update videogame, please check all required fields are correct."
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error400'
+
+    get:
+      tags:
+        - videogames
+      summary: Get all Videogames
+      description: Get all of the videogames in the list
+      operationId: getAllVideogames
+      responses:
+        '200':
+          description: Successfully get a list of all of the videogames in the list
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AllVideogames'
+
+  /videogames/{id}:
+    get:
+      tags:
+        - videogames
+      summary: Get a videogame
+      description: Get a specific videogame by their id
+      operationId: getVideogameById
+      parameters:
+        - name: id
+          in: path
+          description: The ID of the videogame to retrieve
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Get the specified videogame from the list given their ID
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Videogame'
+        '404':
+          description: "No videogames with that id were found"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error404'
+
+    put:
+      tags:
+        - videogames
+      summary: Update an videogame
+      description: Update the specified videogame
+      operationId: updateVideogame
+      parameters:
+        - name: id
+          in: path
+          description: The ID of the videogame to update
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateVideogame'
+      responses:
+        '201':
+          description: Successfully updated the specified videogame
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Videogame'
+        '400':
+          description: "Could not create/update the videogame, please check all required fields are correct."
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error400'
+        '404':
+          description: "No videogames with that id were found"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error404'
+
+    delete:
+      tags:
+        - videogames
+      summary: Delete an videogame
+      description: Delete the specified videogame
+      operationId: deleteVideogame
+      parameters:
+        - name: id
+          in: path
+          description: The ID of the videogame to delete
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Successfully deleted the specified videogame
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Videogame'
+        '404':
+          description: "No videogames with that id were found"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error404'
+
+components:
+  schemas:
+    CreateVideogame:
+      type: object
+      required: [title, game_studio, age_rating, number_of_players, genre]
+      properties:
+        title:
+          type: string
+          example: "Skyrim"
+        game_studio:
+          type: string
+          example: "Bethesda"
+        age_rating:
+          type: string
+          example: "PG-13"
+        number_of_players:
+          type: integer
+          example: 1
+        genre:
+          type: string
+          example: "RPG"
+
+    Videogame:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        title:
+          type: string
+          example: "Skyrim"
+        game_studio:
+          type: string
+          example: "Bethesda"
+        age_rating:
+          type: string
+          example: "PG-13"
+        number_of_players:
+          type: integer
+          example: 1
+        genre:
+          type: string
+          example: "RPG"
+
+    AllVideogames:
+      type: array
+      items:
+        $ref: '#/components/schemas/Videogame'
+
+    Error400:
+      type: object
+      properties:
+        message:
+          type: string
+          example: "bad request"
+
+    Error404:
+      type: object
+      properties:
+        message:
+          type: string
+          example: "not found"
