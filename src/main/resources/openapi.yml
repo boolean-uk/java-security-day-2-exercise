@@ -1,0 +1,306 @@
+openapi: 3.1.0
+info:
+  title: Java API Security Day 2 - Core Criteria
+  description: Core Criteria for the Java Security Lessons
+  version: 1.0.0
+  contact:
+    name: Video Game Library Team
+    email: support@api.com
+servers:
+  - url: http://localhost:8080
+paths:
+  /items:
+    get:
+      tags:
+        - Items
+      summary: Get all items
+      operationId: getAllItems
+      responses:
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '200':
+          description: A list of items
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ItemListResponse'
+    post:
+      tags:
+        - Items
+      summary: Create an item
+      operationId: createItem
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Item'
+      responses:
+        '201':
+          description: Item created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ItemResponse'
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  /items/{id}:
+    get:
+      tags:
+        - Items
+      summary: Get an item by ID
+      operationId: getItemById
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Details of an item
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ItemResponse'
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: Item not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+    put:
+      tags:
+        - Items
+      summary: Update an item by ID
+      operationId: updateItemById
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Item'
+      responses:
+        '200':
+          description: Item updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ItemResponse'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: Item not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+    delete:
+      tags:
+        - Items
+      summary: Delete an item by ID
+      operationId: deleteItemById
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Item deleted
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ItemResponse'
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: Item not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  /auth/signin:
+    post:
+      tags:
+        - Authentication
+      summary: Authenticate a user
+      operationId: authenticateUser
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LoginRequest'
+      responses:
+        '200':
+          description: User authenticated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/JwtResponse'
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MessageResponse'
+  /auth/signup:
+    post:
+      tags:
+        - Authentication
+      summary: Register a new user
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SignupRequest'
+      responses:
+        '200':
+          description: User registered successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MessageResponse'
+        '400':
+          description: Bad request (e.g., username or email already in use)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  components:
+    schemas:
+      SignupRequest:
+        type: object
+        required:
+          - username
+          - email
+          - password
+        properties:
+          username:
+            type: string
+            example: "john_doe"
+          email:
+            type: string
+            format: email
+            example: "john.doe@example.com"
+          password:
+            type: string
+            format: password
+            example: "securePassword123"
+          role:
+            type: array
+            items:
+              type: string
+            example: [ "user", "admin" ]
+
+      MessageResponse:
+        type: object
+        properties:
+          message:
+            type: string
+            example: "User registered successfully"
+
+      ErrorResponse:
+        type: object
+        properties:
+          error:
+            type: string
+            description: "A brief description of the error that occurred."
+            example: "Username is already taken."
+      Role:
+        type: object
+        properties:
+          id:
+            type: integer
+            example: 1
+          name:
+            type: string
+            example: "ROLE_USER"
+
+      User:
+        type: object
+        required:
+          - username
+          - email
+          - password
+        properties:
+          id:
+            type: integer
+            example: 1
+          username:
+            type: string
+            example: "john_doe"
+          email:
+            type: string
+            format: email
+            example: "john.doe@example.com"
+          password:
+            type: string
+            format: password
+            example: "securePassword123"
+          roles:
+            type: array
+            items:
+              $ref: '#/components/schemas/Role'
