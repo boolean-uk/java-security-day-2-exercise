@@ -13,7 +13,7 @@
 
 ## Core Activity
 
-You are going to build on the activity that you worked on yesterday. You need to implement a basic online lending library which contains books, CDs, DVDs, Video Games and other board games, implement an admin level user who can log in and perform all of the normal CRUD tasks on the items contained within the library. Also implement a normal level of user who can interact with the GET endpoints of the API but cannot perform any of the other functions. If you have time create an OpenAPI spec to show this too.
+You are going to build on the activity that you worked on yesterday. You need to implement a basic online lending library which contains books, CDs, DVDs, Video Items and other board items, implement an admin level user who can log in and perform all of the normal CRUD tasks on the items contained within the library. Also implement a normal level of user who can interact with the GET endpoints of the API but cannot perform any of the other functions. If you have time create an OpenAPI spec to show this too.
 
 ## Extension Activity
 
