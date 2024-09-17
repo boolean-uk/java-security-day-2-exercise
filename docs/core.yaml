@@ -1,0 +1,148 @@
+openapi: 3.1.0
+info:
+  title: Java API Items - Core Criteria
+  description: Core Criteria for today's exercise
+  version: 0.2.3
+  contact:
+    name: Items Spec
+
+servers:
+  - url: http://localhost:4000
+tags:
+  - name: items
+    description: Items API
+
+paths:
+  /items:
+    post:
+      tags:
+        - items
+      summary: Create a item
+      description: Create a new item
+      operationId: createItem
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateItem'
+      responses:
+        '201':
+          description: Successfully created a new item
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Item'
+    get:
+      tags:
+        - items
+      summary: Get all items
+      description: Get a list of every item.
+      operationId: getItems
+      responses:
+        '200':
+          description: Get a list of all items
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AllItems'
+  /items/{id}:
+    put:
+      tags:
+        - items
+      summary: Update a item
+      description: Update an existing item. For ease of implementation, all fields are required from the client.
+      operationId: updateItem
+      parameters:
+        - name: id
+          in: path
+          description: The ID of the item to update
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateItem'
+      responses:
+        '201':
+          description: Successfully updated the specified item
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Item'
+    get:
+      tags:
+        - items
+      summary: Get a item
+      description: Get a single item by its ID
+      operationId: getItem
+      parameters:
+        - name: id
+          in: path
+          description: The ID of the item to retrieve
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Successfully retrieved the specified item
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Item'
+    delete:
+      tags:
+        - items
+      summary: Delete a item
+      description: Delete an existing item. When deleting data, it's useful to send the deleted record back to the client so they can re-create it if deletion was a mistake.
+      operationId: deleteItem
+      parameters:
+        - name: id
+          in: path
+          description: The ID of the item to delete
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Successfully deleted the specified item
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Item'
+
+components:
+  schemas:
+    CreateItem:
+      type: object
+      required: [title, author, genre]
+      properties:
+        title:
+          type: string
+          example: "1984"
+        author:
+          type: string
+          example: "George Orwell"
+        genre:
+          type: string
+          example: "Dystopian Fiction"
+    Item:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        title:
+          type: string
+          example: "1984"
+        author:
+          type: string
+          example: "George Orwell"
+        genre:
+          type: string
+          example: "Dystopian Fiction"
+    AllItems:
+      type: array
+      items:
+        $ref: '#/components/schemas/Item'
