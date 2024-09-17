@@ -1,0 +1,226 @@
+openapi: 3.0.3
+info:
+  title: Java API Exercise - Core Criteria
+  description: Core Criteria for the Library loan
+  version: 0.2.2
+  contact:
+    name: Library Loan Challenge
+
+servers:
+  - url: http://localhost:4000
+
+tags:
+  - name: users
+  - name: items
+
+paths:
+  /auth/signup:
+    post:
+      tags:
+        - users
+      summary: User signup
+      description: Create a new user account
+      operationId: userSignup
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateUser'
+      responses:
+        '201':
+          description: Successfully created a new user
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+  /auth/signin:
+    post:
+      tags:
+        - users
+      summary: User signin
+      description: Sign in an existing user
+      operationId: userSignin
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserSignin'
+      responses:
+        '201':
+          description: User successfully signed in
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+  /items:
+    post:
+      tags:
+        - items
+      summary: Create an item
+      security:
+        - jwt:
+            - ADMIN
+      operationId: createItem
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateItem'
+      responses:
+        '201':
+          description: Successfully created a new item
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Item'
+
+    get:
+      tags:
+        - items
+      summary: Get all items
+      description: Get a list of item
+      operationId: getItems
+      responses:
+        '200':
+          description: Get a list of all items
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AllItems'
+
+  /items/{id}:
+    put:
+      tags:
+        - items
+      summary: Update an item
+      description: Update existing game
+      operationId: updateGame
+      security:
+        - jwt:
+            - ADMIN
+      parameters:
+        - name: id
+          in: path
+          description: The ID of the item to update
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateItem'
+      responses:
+        '201':
+          description: Successfully updated the specified item
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Item'
+
+    delete:
+      tags:
+        - items
+      summary: Delete an item
+      description: Delete an existing item
+      operationId: deleteItem
+      security:
+        - jwt:
+            - ADMIN
+      parameters:
+        - name: id
+          in: path
+          description: The ID of the item to delete
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Successfully deleted the specified item
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Item'
+
+  components:
+    schemas:
+      CreateUser:
+        type: object
+        required: [ name, email, password, roles ]
+        properties:
+          name:
+            type: string
+            example: "Dave"
+          email:
+            type: string
+            format: string
+            example: "dave@gmail.com"
+          password:
+            type: string
+            format: string
+            example: "password"
+          roles:
+            type: array
+            format: array
+            example: [ "admin" ]
+      User:
+        type: object
+        properties:
+          id:
+            type: integer
+            example: 1
+          name:
+            type: string
+            example: "Dave"
+          email:
+            type: string
+            example: "dave@example.com"
+      AllUsers:
+        type: array
+        items:
+          $ref: '#/components/schemas/User'
+
+      UserSignin:
+        type: object
+        required: [ username, password ]
+        properties:
+          username:
+            type: string
+            example: "Dave"
+          password:
+            type: string
+            format: string
+            example: "password"
+
+      CreateItem:
+        type: object
+        required: [ title, type ]
+        properties:
+          title:
+            type: string
+            example: "Title"
+          type:
+            type: string
+            example: "book"
+      Item:
+        type: object
+        properties:
+          id:
+            type: integer
+            example: 1
+          title:
+            type: string
+            example: "Title"
+          type:
+            type: string
+            example: "book"
+      AllItems:
+        type: array
+        items:
+          $ref: '#/components/schemas/Item'
+
+    securitySchemes:
+      jwt:
+        type: apiKey
+        in: header
+        name: Authorization
