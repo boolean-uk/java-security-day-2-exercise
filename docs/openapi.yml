@@ -1,0 +1,365 @@
+openapi: 3.1.0
+info:
+  title: Java Security Exercise - Core + Extension Criteria
+  version: 0.1.0
+
+servers:
+  - url: http://localhost:4000
+
+tags:
+  - name: authentication
+  - name: items
+  - name: loans
+
+paths:
+  /auth/signup:
+    post:
+      tags:
+        - authentication
+      summary: Create a user
+      description: Endpoint to create a new user
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateUser'
+      responses:
+        '201':
+          description: User created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+
+  /auth/signin:
+    post:
+      tags:
+        - authentication
+      summary: Sign in and generate JWT token
+      description: Endpoint to authenticate users and generate JWT token
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SignInRequest'
+      responses:
+        '200':
+          description: Authentication successful
+
+  /items:
+    post:
+      tags:
+        - items
+      security:
+        - jwt: []
+      summary: Create a new item
+      description: Endpoint to create a new item in the library
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateItem'
+      responses:
+        '201':
+          description: Item created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Item'
+    get:
+      tags:
+        - items
+      security:
+        - jwt: []
+      summary: Get all items
+      description: Endpoint to fetch all items in the library
+      responses:
+        '200':
+          description: Items retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Item'
+  /items/{itemId}:
+    get:
+      tags:
+        - items
+      security:
+        - jwt: []
+      summary: Get item details
+      description: Endpoint to fetch details of a specific item
+      parameters:
+        - name: itemId
+          in: path
+          description: ID of the item to retrieve
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Item details retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Item'
+    put:
+      tags:
+        - items
+      security:
+        - jwt: []
+      summary: Update item details
+      description: Endpoint to update the details of a specific item
+      parameters:
+        - name: itemId
+          in: path
+          description: ID of the item to update
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateItem'
+      responses:
+        '200':
+          description: Item details updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Item'
+    delete:
+      tags:
+        - items
+      security:
+        - jwt: []
+      summary: Delete item
+      description: Endpoint to delete the details of a specific item
+      parameters:
+        - name: itemId
+          in: path
+          description: ID of the item to delete
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Item deleted successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Item'
+
+  /loans/borrow:
+    post:
+      tags:
+        - loans
+      summary: Borrow an item
+      description: Endpoint to borrow an item
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BorrowItemRequest'
+      responses:
+        '200':
+          description: Item borrowed successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Loan'
+  /loans/return:
+    post:
+      tags:
+        - loans
+      summary: Return a borrowed item
+      description: Endpoint to return a borrowed item
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ReturnItemRequest'
+      responses:
+        '200':
+          description: Item returned successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Loan'
+  /loans/user/{userId}:
+    get:
+      tags:
+        - loans
+      summary: Get items currently borrowed by a specific user
+      description: Endpoint to fetch items currently borrowed by a specific user (admin only)
+      parameters:
+        - name: userId
+          in: path
+          description: ID of the user
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Items retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Loan'
+  /loans/all:
+    get:
+      tags:
+        - loans
+      security:
+        - jwt: []
+      summary: Get items currently borrowed by all user
+      description: Endpoint to fetch items currently borrowed by all users (admin only)
+      responses:
+        '200':
+          description: Items retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Loan'
+
+components:
+
+  schemas:
+    CreateUser:
+      type: object
+      required:
+        - username
+        - email
+        - password
+      properties:
+        username:
+          type: string
+          example: john_doe
+        email:
+          type: string
+          format: email
+          example: john@example.com
+        password:
+          type: string
+          example: password123
+        role:
+          type: array
+          example: ["admin", "user"]
+    SignInRequest:
+      type: object
+      required:
+        - username
+        - password
+      properties:
+        username:
+          type: string
+          format: username
+          example: john_doe
+        password:
+          type: string
+          example: password123
+    CreateItem:
+      type: object
+      required:
+        - title
+        - type
+      properties:
+        title:
+          type: string
+          example: Book Title
+        type:
+          type: string
+          example: Book
+    UpdateItem:
+      type: object
+      properties:
+        title:
+          type: string
+          example: New Book Title
+        type:
+          type: string
+          example: Book
+    BorrowItemRequest:
+      type: object
+      required:
+        - itemId
+        - userId
+      properties:
+        itemId:
+          type: integer
+          example: 1
+        userId:
+          type: integer
+          example: 1
+
+    ReturnItemRequest:
+      type: object
+      required:
+        - itemId
+        - userId
+      properties:
+        itemId:
+          type: integer
+          example: 1
+        userId:
+          type: integer
+          example: 1
+    Loan:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        item:
+          $ref: '#/components/schemas/Item'
+        user:
+          $ref: '#/components/schemas/User'
+        borrowDate:
+          type: string
+          format: date-time
+          example: '2024-02-16T11:01:56Z'
+        returnDate:
+          type: string
+          format: date-time
+          example: '2024-02-23T11:01:56Z'
+    User:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        userName:
+          type: string
+          example: john_doe
+        email:
+          type: string
+          example: john@example.com
+        createdAt:
+          type: string
+          format: date-time
+          example: '2024-02-16T11:01:56Z'
+    Item:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        title:
+          type: string
+          example: Book Title
+        type:
+          type: string
+          example: Book
+
