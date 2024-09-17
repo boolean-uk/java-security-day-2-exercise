@@ -1,0 +1,408 @@
+openapi: 3.1.0
+info:
+  title: Java Security Exercise 2 - Core Criteria
+  description: Extension Criteria for Java Security Exercise Day 2
+  version: 0.2.3
+  contact:
+    name: Java Security Day 2
+servers:
+  - url: http://localhost:4000
+tags:
+  - name: items
+  - name: loans
+  - name: authentication
+paths:
+  /loans:
+    get:
+      tags:
+        - loans
+      summary: Get loans
+      description: Get all of the loans in the list
+      operationId: getLoans
+      responses:
+        '200':
+          description: Successfully returned a list of all loans
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AllItems'
+
+
+  /loans/item/{id}/history:
+    get:
+      tags:
+        - loans
+      summary: Get a list of loans
+      description: Get a list of loan history from item by id
+      operationId: getItemLoans
+      parameters:
+        - name: id
+          in: path
+          description: The ID of the item to retrieve
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Get the loansHistory from the item given its ID
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AllLoan'
+  /loans/user/{id}/history:
+    get:
+      tags:
+        - loans
+      summary: Get a list of loans
+      description: Get a list of loan history from user by id
+      operationId: getUserLoans
+      parameters:
+        - name: id
+          in: path
+          description: The ID of the item to retrieve
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Get the loansHistory from the user given its ID
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AllLoan'
+  /loans/user/{id}/item/{itemId}:
+    post:
+      tags:
+        - loans
+      summary: Create a loan
+      description: Create a loan using user id and item id
+      operationId: createLoan
+      parameters:
+        - name: id
+          in: path
+          description: The ID of the user
+          required: true
+          schema:
+            type: integer
+        - name: itemId
+          in: path
+          description: The ID of the item
+          required: true
+          schema:
+            type: integer
+      responses:
+        '201':
+          description: Create a loan
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreateLoan'
+  /loans/{id}:
+    delete:
+      tags:
+        - loans
+      summary: Delete a loan
+      description: Delete a Loan by id
+      operationId: deleteLoan
+      parameters:
+        - name: id
+          in: path
+          description: The ID of the loan to remove
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Delete a loan
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Loan'
+
+  /items:
+    post:
+      tags:
+        - items
+      summary: Create item
+      description: Create a new item
+      operationId: createItem
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateItem'
+      responses:
+        '201':
+          description: Successfully created a new item
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreateItem'
+        '401':
+          description: Unauthorized access
+
+    get:
+      tags:
+        - items
+      summary: Get items
+      description: Get all of the items in the list
+      operationId: getItems
+      responses:
+        '200':
+          description: Successfully returned a list of all items
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AllItems'
+
+
+  /items/{id}:
+    put:
+      tags:
+        - items
+      summary: Update a item
+      description: Update the specified item
+      operationId: updateItem
+      parameters:
+        - name: id
+          in: path
+          description: The ID of the item to update
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateItem'
+      responses:
+        '201':
+          description: Successfully updated the specified library
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Item'
+        '401':
+          description: Unauthorized access
+
+    delete:
+      tags:
+        - items
+      summary: Delete a item
+      description: Delete the specified item
+      operationId: deleteItem
+      parameters:
+        - name: id
+          in: path
+          description: The ID of the item to delete
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Successfully deleted the specified item
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Item'
+        '401':
+          description: Unauthorized access
+
+    get:
+      tags:
+        - items
+      summary: Get a item
+      description: Get a specific item by id
+      operationId: getSpecificItem
+      parameters:
+        - name: id
+          in: path
+          description: The ID of the item to retrieve
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Get the specified item from the list given its ID
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Item'
+  /auth/signin:
+    post:
+      tags:
+        - authentication
+      summary: Authenticate User
+      description: Authenticates a user and returns a JWT token
+      operationId: authenticateUser
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LoginRequest'
+      responses:
+        '200':
+          description: Successful authentication
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/JwtResponse'
+        '401':
+          description: Unauthorized - Invalid credentials
+
+  /auth/signup:
+    post:
+      tags:
+        - authentication
+      summary: Register User
+      description: Registers a new user
+      operationId: registerUser
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SignupRequest'
+      responses:
+        '200':
+          description: User registered successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MessageResponse'
+        '400':
+          description: Bad Request - Username or email already taken
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MessageResponse'
+
+components:
+  schemas:
+    CreateItem:
+      type: object
+      required: [ type, title, author, publisher, year, genre ]
+      properties:
+        type:
+          type: string
+          example: "type"
+        title:
+          type: string
+          example: "title"
+        author:
+          type: string
+          example: "author"
+        publisher:
+          type: string
+          example: "publisher"
+        year:
+          type: integer
+          example: 1
+        genre:
+          type: string
+          example: "genre"
+    Item:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        type:
+          type: string
+          example: "type"
+        title:
+          type: string
+          example: "title"
+        author:
+          type: string
+          example: "author"
+        publisher:
+          type: string
+          example: "publisher"
+        year:
+          type: integer
+          example: 1
+        genre:
+          type: string
+          example: "genre"
+    AllItems:
+      type: array
+      items:
+        $ref: '#/components/schemas/Item'
+    CreateLoan:
+      type: object
+      required: [ title ]
+      properties:
+        title:
+          type: string
+          example: "title"
+    Loan:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        title:
+          type: string
+          example: "title"
+        createdAt:
+          type: string
+          format: DateTime
+          example: "2023-03-14T11:01:56.633+00:00"
+        updatedAt:
+          type: string
+          format: DateTime
+          example: "2023-03-14T11:01:56.633+00:00"
+    AllLoan:
+      type: array
+      items:
+        $ref: '#/components/schemas/Loan'
+    LoginRequest:
+      type: object
+      properties:
+        username:
+          type: string
+        password:
+          type: string
+      required:
+        - username
+        - password
+    JwtResponse:
+      type: object
+      properties:
+        token:
+          type: string
+        id:
+          type: string
+        username:
+          type: string
+        email:
+          type: string
+        role:
+          type: array
+          items:
+            type: string
+    SignupRequest:
+      type: object
+      properties:
+        username:
+          type: string
+        email:
+          type: string
+        password:
+          type: string
+        role:
+          type: array
+          items:
+            type: string
+            example: "admin"
+      required:
+        - username
+        - email
+        - password
+    MessageResponse:
+      type: object
+      properties:
+        message:
+          type: string
