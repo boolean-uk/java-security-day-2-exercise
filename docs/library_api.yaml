@@ -1,0 +1,457 @@
+openapi: 3.1.0
+info:
+  title: Java API Library
+  description: Core API for the Requests and Responses for a Library
+  version: 0.0.4
+  contact:
+    name: Library
+
+servers:
+  - url: http://localhost:4000
+tags:
+  - name : Video Games
+  - name : Books
+  - name : CD:s
+paths:
+  /videogames:
+    post:
+      tags:
+        - Video Games
+      operationId: videogamesPost
+      summary: Create a Video Game
+      description: New video game creation
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateVideoGame'
+      responses:
+        '201':
+          description: Video Game created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/VideoGame'
+    get:
+      tags:
+        - Video Games
+      summary: Get All Video Games
+      description: Get all of the listed videogames
+      operationId: getVideoGames
+      responses:
+        '200':
+          description: Get all videogames
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AllVideoGames'
+  /videogames/{id}:
+    get:
+      parameters:
+        - name: id
+          in: path
+          description: Id of the videogame
+          required: true
+          schema:
+            type: integer
+      tags:
+        - Video Games
+      summary: Get a specific Video Game
+      description: Get one videogame from the list
+      operationId: getSpecificVideoGame
+      responses:
+        '200':
+          description: Get a single videogame
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/VideoGame'
+
+    put:
+      tags:
+        - Video Games
+      summary: Update a Video Game
+      description: use the ID of a videogame to update it using the payload
+      operationId: updateVideoGame
+      parameters:
+        - name: id
+          in: path
+          description: The ID of the videogame to update
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateVideoGame'
+      responses:
+        '201':
+          description: Video Game successfully updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/VideoGame'
+    delete:
+      tags:
+        - Video Games
+      summary: Delete an Video Game
+      description: Delete an videogame using their ID
+      operationId: deleteVideoGame
+      parameters:
+        - name: id
+          in: path
+          description: The ID of the videogame to delete
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Successfully deleted the Video Game
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/VideoGame'
+
+
+
+
+  /books:
+    post:
+      tags:
+        - Books
+      operationId: booksPost
+      summary: Create a Book
+      description: New book creation
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateBook'
+      responses:
+        '201':
+          description: Book created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Book'
+    get:
+      tags:
+        - Books
+      summary: Get All Books
+      description: Get all of the listed books
+      operationId: getBooks
+      responses:
+        '200':
+          description: Get all books
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AllBooks'
+  /books/{id}:
+    get:
+      parameters:
+        - name: id
+          in: path
+          description: Id of the book
+          required: true
+          schema:
+            type: integer
+      tags:
+        - Books
+      summary: Get a specific Book
+      description: Get one book from the list
+      operationId: getSpecificBook
+      responses:
+        '200':
+          description: Get a single book
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Book'
+    put:
+      tags:
+        - Books
+      summary: Update a Book
+      description: use the ID of a book to update it using the payload
+      operationId: updateBook
+      parameters:
+        - name: id
+          in: path
+          description: The ID of the book to update
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateBook'
+      responses:
+        '201':
+          description: Book successfully updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Book'
+    delete:
+      tags:
+        - Books
+      summary: Delete a Book
+      description: Delete an book using their ID
+      operationId: deleteBook
+      parameters:
+        - name: id
+          in: path
+          description: The ID of the book to delete
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Successfully deleted the Book
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Book'
+
+
+
+
+  /cds:
+    post:
+      tags:
+        - CD:s
+      operationId: loansPost
+      summary: Create a CD
+      description: New CD creation
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateCD'
+      responses:
+        '201':
+          description: CD created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CD'
+    get:
+      tags:
+        - CD:s
+      summary: Get All CD:s
+      description: Get all of the listed CD:s
+      operationId: getCDs
+      responses:
+        '200':
+          description: Get all CD:s
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AllCDs'
+  /cds/{id}:
+    get:
+      parameters:
+        - name: id
+          in: path
+          description: Id of the CD
+          required: true
+          schema:
+            type: integer
+      tags:
+        - CD:s
+      summary: Get a specific CD
+      description: Get one CD from the list
+      operationId: getSpecificCD
+      responses:
+        '200':
+          description: Get a single CD
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CD'
+    put:
+      tags:
+        - CD:s
+      summary: Update a CD
+      description: use the ID of a CD to update it using the payload
+      operationId: updateCD
+      parameters:
+        - name: id
+          in: path
+          description: The ID of the CD to update
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateCD'
+      responses:
+        '201':
+          description: CD successfully updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CD'
+    delete:
+      tags:
+        - CD:s
+      summary: Delete a CD
+      description: Delete an CD using their ID
+      operationId: deleteCD
+      parameters:
+        - name: id
+          in: path
+          description: The ID of the CD to delete
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Successfully deleted the CD
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CD'
+
+
+
+components:
+  schemas:
+    CreateVideoGame:
+      type: object
+      required: [title, studio, rating, numberOfPlayers, genre]
+      properties:
+        title:
+          type: string
+          example: "The Last of Us Part I"
+        studio:
+          type: string
+          example: "Naughty Dog"
+        rating:
+          type: string
+          example: "8/10"
+        num_of_players:
+          type: integer
+          example: 1
+        genre:
+          type: string
+          example: "Adventure"
+    VideoGame:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 6
+        title:
+          type: string
+          example: "The Last of Us Part I"
+        studio:
+          type: string
+          example: "Naughty Dog"
+        rating:
+          type: string
+          example: "8/10"
+        numberOfPlayers:
+          type: integer
+          example: 1
+        genre:
+          type: string
+          example: "Adventure"
+    AllVideoGames:
+      type: array
+      items:
+        $ref: '#/components/schemas/VideoGame'
+
+
+
+
+    CreateCD:
+      type: object
+      required: [title, artist, tracks, genre]
+      properties:
+        title:
+          type: string
+          example: "Off the Wall"
+        artist:
+          type: string
+          example: "Michael Jackson"
+        tracks:
+          type: integer
+          example: 9
+        genre:
+          type: string
+          example: "Pop"
+    CD:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 2
+        title:
+          type: string
+          example: "Off the Wall"
+        artist:
+          type: string
+          example: "Michael Jackson"
+        tracks:
+          type: integer
+          example: 9
+        genre:
+          type: string
+          example: "Pop"
+    AllCDs:
+      type: array
+      items:
+        $ref: '#/components/schemas/CD'
+
+
+
+
+    CreateBook:
+      type: object
+      required: [title, author, publisher, year, genre]
+      properties:
+        title:
+          type: string
+          example: "1984"
+        author:
+          type: string
+          example: "George Orwell"
+        publisher:
+          type: string
+          example: "Secker and Warburg"
+        year:
+          type: integer
+          example: 1949
+        genre:
+          type: string
+          example: "Science Fiction"
+    Book:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 2
+        title:
+          type: string
+          example: "1984"
+        author:
+          type: string
+          example: "George Orwell"
+        publisher:
+          type: string
+          example: "Secker and Warburg"
+        year:
+          type: integer
+          example: 1949
+        genre:
+          type: string
+          example: "Science Fiction"
+    AllBooks:
+      type: array
+      items:
+        $ref: '#/components/schemas/CD'
