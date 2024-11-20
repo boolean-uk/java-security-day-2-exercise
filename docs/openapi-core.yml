@@ -1,0 +1,522 @@
+openapi: 3.1.0
+info:
+  title: Java Security Day 2 Exercise
+  description: Core Criteria for the Java Security Day 2 Exercise
+  version: 0.2.3
+  contact:
+    name: Java Security Day 2 Exercise
+
+servers:
+  - url: http://localhost:4000
+tags:
+  - name: items
+  - name: users
+  - name: loans
+paths:
+  /items:
+    post:
+      tags:
+        - items
+      summary: Create an item
+      description: Create a new item.
+      operationId: createItem
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateItem'
+      responses:
+        '201':
+          description: Successfully created a new item
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Item'
+        '400':
+          description: Could not create a new item, please check all fields are correct.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error400'
+    get:
+      tags:
+        - items
+      summary: Get all items
+      description: Get a list of every item.
+      operationId: getItems
+      responses:
+        '200':
+          description: Get a list of all items
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AllItems'
+  /items/{id}:
+    put:
+      tags:
+        - items
+      summary: Update an item
+      description: Update an existing item. Any combination of fields may be provided.
+      operationId: updateItem
+      parameters:
+        - name: id
+          in: path
+          description: The ID of the item to update
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateItem'
+      responses:
+        '201':
+          description: Successfully updated the specified item
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Item'
+        '400':
+          description: Could not update the item, please check all fields are correct.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error400'
+        '404':
+          description: No item with that ID found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error404'
+    delete:
+      tags:
+        - items
+      summary: Delete an item
+      description: Delete an existing item.
+      operationId: deleteItem
+      parameters:
+        - name: id
+          in: path
+          description: The ID of the item to delete
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Successfully deleted the specified item
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Item'
+        '404':
+          description: No item with that ID found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error404'
+        '400':
+          description: The item cannot be deleted bacause it has loans attatched to it.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error400'
+
+  /auth/signup:
+    post:
+      tags:
+        - users
+      summary: Create a user
+      description: Create a new user.
+      operationId: createUser
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateUser'
+      responses:
+        '201':
+          description: Successfully created a new User
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        '400':
+          description: Could not create a new user, please check all fields are correct.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error400'
+  /users:
+    get:
+      tags:
+        - users
+      summary: Get all users
+      description: Get a list of every user.
+      operationId: getUsers
+      responses:
+        '200':
+          description: Successfully returned a list of all users
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AllUsers'
+
+  /users/{userId}/items/{itemId}:
+    post:
+      tags:
+        - loans
+      summary: Create a loan
+      description: Create a loan for a particular user and item.
+      operationId: createLoan
+      parameters:
+        - name: userId
+          in: path
+          description: The ID of the user to create the loan for
+          required: true
+          schema:
+            type: integer
+        - name: itemId
+          in: path
+          description: The ID of the item to create the loan for
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateLoan'
+      responses:
+        '201':
+          description: Successfully created a loan for the specified user
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Loan'
+        '400':
+          description: Could not create a new loan, please check all fields are correct.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error400'
+    get:
+      tags:
+        - loans
+      summary: Get loans for a particular user and item
+      description: Get loans for a particular user and item.
+      operationId: getLoans
+      parameters:
+        - name: userId
+          in: path
+          description: The ID of the user to get the loans of
+          required: true
+          schema:
+            type: integer
+        - name: itemId
+          in: path
+          description: The ID of the item to get the loans of
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Successfully returned a list of all loans of the specified user and item
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AllLoans'
+  /loans/{id}:
+    put:
+      tags:
+        - loans
+      summary: Update a loan
+      description: Update an existing loan.
+      operationId: updateLoan
+      parameters:
+        - name: id
+          in: path
+          description: The ID of the loan
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateLoan'
+      responses:
+        '201':
+          description: Successfully updated the specified loan
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Loan'
+        '400':
+          description: Could not update the loan, please check all fields are correct.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error400'
+        '404':
+          description: No loan with that ID found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error404'
+  /users/{id}/loans:
+    get:
+      tags:
+        - loans
+      summary: Get all loans of a user
+      description: Get a list of every loan for a user.
+      operationId: getUserLoans
+      parameters:
+        - name: id
+          in: path
+          description: The ID of the user to retrieve the loans for
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Successfully returned a list of all loans of the specified user
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AllUserLoans'
+        '404':
+          description: No user with that ID found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error404'
+  /items/{id}/loans:
+    get:
+      tags:
+        - loans
+      summary: Get all loans of an item
+      description: Get a list of every loan for an item.
+      operationId: getItemLoans
+      parameters:
+        - name: id
+          in: path
+          description: The ID of the item to retrieve the loans for
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Successfully returned a list of all loans of the specified item
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AllItemLoans'
+        '404':
+          description: No item with that ID found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error404'
+components:
+  schemas:
+    CreateItem:
+      type: object
+      required: [name, type]
+      properties:
+        name:
+          type: string
+          example: "The Last of Us"
+        type:
+          type: string
+          example: "Video game"
+    UpdateItem:
+      type: object
+      properties:
+        name:
+          type: string
+          example: "The Last of Us"
+        type:
+          type: string
+          example: "Video game"
+    Item:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        name:
+          type: string
+          example: "The Last of Us"
+        type:
+          type: string
+          example: "Video game"
+        createdAt:
+          type: string
+          format: DateTime
+          example: "2023-03-14T11:01:56.633+00:00"
+        updatedAt:
+          type: string
+          format: DateTime
+          example: "2023-03-14T11:01:56.633+00:00"
+    AllItems:
+      type: array
+      items:
+        $ref: '#/components/schemas/Item'
+
+    CreateUser:
+      type: object
+      required: [ username, email, password]
+      properties:
+        username:
+          type: string
+          example: "JaneDoe"
+        email:
+          type: string
+          example: "jane@doe.com"
+        password:
+          type: string
+          example: "password"
+        role:
+          type: array
+          format: array
+          example: ["admin", "user"]
+
+    User:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        username:
+          type: string
+          example: "JaneDoe"
+        email:
+          type: string
+          example: "jane@doe.com"
+        password:
+          type: string
+          example: "password"
+        role:
+          type: array
+          format: array
+          example: ["admin", "user"]
+        createdAt:
+          type: string
+          format: DateTime
+          example: "2023-03-14T11:01:56.633+00:00"
+        updatedAt:
+          type: string
+          format: DateTime
+          example: "2023-03-14T11:01:56.633+00:00"
+
+    AllUsers:
+      type: array
+      items:
+        $ref: '#/components/schemas/User'
+
+    CreateLoan:
+      type: object
+      required: [ active ]
+      properties:
+        active:
+          type: boolean
+          example: true
+    UpdateLoan:
+      type: object
+      required: [ active ]
+      properties:
+        active:
+          type: boolean
+          example: true
+    Loan:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        active:
+          type: boolean
+          example: true
+        createdAt:
+          type: string
+          format: DateTime
+          example: "2023-03-14T11:01:56.633+00:00"
+        updatedAt:
+          type: string
+          format: DateTime
+          example: "2023-03-14T11:01:56.633+00:00"
+    UserLoan:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        active:
+          type: boolean
+          example: true
+        item:
+          $ref: '#/components/schemas/Item'
+        createdAt:
+          type: string
+          format: DateTime
+          example: "2023-03-14T11:01:56.633+00:00"
+        updatedAt:
+          type: string
+          format: DateTime
+          example: "2023-03-14T11:01:56.633+00:00"
+    ItemLoan:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        active:
+          type: boolean
+          example: true
+        user:
+          $ref: '#/components/schemas/User'
+        createdAt:
+          type: string
+          format: DateTime
+          example: "2023-03-14T11:01:56.633+00:00"
+        updatedAt:
+          type: string
+          format: DateTime
+          example: "2023-03-14T11:01:56.633+00:00"
+    AllItemLoans:
+      type: array
+      items:
+        $ref: '#/components/schemas/ItemLoan'
+    AllUserLoans:
+      type: array
+      items:
+        $ref: '#/components/schemas/UserLoan'
+    AllLoans:
+      type: array
+      items:
+        $ref: '#/components/schemas/Loan'
+    Error400:
+      type: object
+      properties:
+        status:
+          type: string
+          example: "error"
+        data:
+          type: object
+          properties:
+            message:
+              type: string
+              example: "bad request"
+    Error404:
+      type: object
+      properties:
+        status:
+          type: string
+          example: "error"
+        data:
+          type: object
+          properties:
+            message:
+              type: string
+              example: "not found"
