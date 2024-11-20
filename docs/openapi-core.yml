@@ -1,0 +1,238 @@
+openapi: 3.0.3
+info:
+  title: Library Loan JAVA exercise
+  description: Library Loan JAVA exercise
+  version: 0.2.2
+  contact:
+    name: Item Book Challenge
+
+servers:
+  - url: http://localhost:4000
+
+tags:
+  - name: users
+  - name: items
+
+paths:
+  /auth/signup:
+    post:
+      tags:
+        - users
+      summary: User Signup
+      description: Create a new user account
+      operationId: userSignup
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateUser'
+      responses:
+        '201':
+          description: Successfully created a new user
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+
+  /auth/signin:
+    post:
+      tags:
+        - users
+      summary: User Signin
+      description: Sign in an existing user
+      operationId: userSignin
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserSignin'
+      responses:
+        '200':
+          description: Successfully signed in
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+
+  /items:
+    post:
+      tags:
+        - items
+      summary: Create an item
+      description: Create a new item
+      operationId: createItem
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateItem'
+      responses:
+        '201':
+          description: Successfully created a new item
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Item'
+    get:
+      tags:
+        - items
+      summary: Get all items
+      description: Get a list of every item.
+      operationId: getItems
+      responses:
+        '200':
+          description: Get a list of all items
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AllItems'
+
+  /items/{id}:
+    get:
+      tags:
+        - items
+      summary: Get an item
+      description: Get a specific item.
+      operationId: getItem
+      parameters:
+        - name: id
+          in: path
+          description: The ID of the item to get
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Successfully retrieved the specified item
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Item'
+    put:
+      tags:
+        - items
+      summary: Update an item
+      description: Update an existing item. For ease of implementation, all fields are required from the client.
+      operationId: updateItem
+      parameters:
+        - name: id
+          in: path
+          description: The ID of the item to update
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateItem'
+      responses:
+        '200':
+          description: Successfully updated the specified item
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Item'
+    delete:
+      tags:
+        - items
+      summary: Delete an item
+      description: Delete an existing item. When deleting data, it's useful to send the deleted record back to the client so they can re-create it if deletion was a mistake.
+      operationId: deleteItem
+      parameters:
+        - name: id
+          in: path
+          description: The ID of the item to delete
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Successfully deleted the specified item
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Item'
+
+components:
+  schemas:
+    CreateUser:
+      type: object
+      required: [ name, email, password, roles ]
+      properties:
+        name:
+          type: string
+          example: "John Doe"
+        email:
+          type: string
+          format: string
+          example: "John@email.com"
+        password:
+          type: string
+          format: string
+          example: "password"
+        roles:
+          type: array
+          format: array
+          example: ["admin"]
+    User:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        name:
+          type: string
+          example: "John Doe"
+        email:
+          type: string
+          example: "john.doe@example.com"
+    AllUsers:
+      type: array
+      items:
+        $ref: '#/components/schemas/User'
+
+    UserSignin:
+      type: object
+      required: [ username, password ]
+      properties:
+        username:
+          type: string
+          example: "John Doe"
+        password:
+          type: string
+          format: string
+          example: "password"
+
+    CreateItem:
+      type: object
+      required: [ title, type ]
+      properties:
+        title:
+          type: string
+          example: "Title"
+        type:
+          type: string
+          example: "game"
+    Item:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        title:
+          type: string
+          example: "Title"
+        type:
+          type: string
+          example: "game"
+    AllItems:
+      type: array
+      items:
+        $ref: '#/components/schemas/Item'
+
+  securitySchemes:
+    jwt:
+      type: apiKey
+      in: header
+      name: Authorization
