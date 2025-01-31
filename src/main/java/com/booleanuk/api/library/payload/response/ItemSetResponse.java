@@ -2,8 +2,7 @@ package com.booleanuk.api.library.payload.response;
 
 import com.booleanuk.api.library.model.Item;
 
-import java.util.List;
+import java.util.Set;
 
-public class ItemListResponse extends Response<List<Item>> {
-
+public class ItemSetResponse extends Response<Set<Item>>{
 }

@@ -54,8 +54,8 @@ public class WebSecurityConfig {
                 .sessionManagement((session) -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests((requests) -> requests
                         .requestMatchers("/auth/**").permitAll()
-                        .requestMatchers("/items").authenticated()
-                        .requestMatchers("/items/**").hasRole("ADMIN")
+                        .requestMatchers("/items", "/items/current/**", "/items/historic/**", "/items/*/borrow/**", "/items/*/return/**").authenticated()
+                        .requestMatchers("/items/**", "/items/create", "/items/*/borrow/**", "/items/*/return/**").hasRole("ADMIN")
                 );
         http.authenticationProvider(authenticationProvider());
         http.addFilterBefore(authenticationJwtTokenFilter(), UsernamePasswordAuthenticationFilter.class);
