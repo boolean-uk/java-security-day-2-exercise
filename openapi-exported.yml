@@ -1,0 +1,531 @@
+_type: export
+__export_format: 4
+__export_date: 2025-02-03T15:40:43.581Z
+__export_source: insomnia.desktop.app:v10.3.0
+resources:
+  - _id: req_e6e490b388d445a18ed54d6de81e0a74
+    parentId: fld_1ee9f2846928421fb200b94cb2793511
+    modified: 1738252213196
+    created: 1738252185367
+    url: localhost:4000/users
+    name: Get all
+    description: ""
+    method: GET
+    body: {}
+    parameters: []
+    headers:
+      - name: User-Agent
+        value: insomnia/10.3.0
+    authentication:
+      type: bearer
+      token: eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJtZXJtYWlkIiwiaWF0IjoxNzM4MjUyMjAxLCJleHAiOjE3MzgzMzg2MDF9.76XJgOcFpqes0ECMgaC9oBnvhNxzBPGEwyer8Tn_EJh387jAjNZqr6VmiiC0uWM9uMTOivubBxfhFN8mW6GosQ
+      disabled: true
+    metaSortKey: -1738252185367
+    isPrivate: false
+    pathParameters: []
+    settingStoreCookies: true
+    settingSendCookies: true
+    settingDisableRenderRequestBody: false
+    settingEncodeUrl: true
+    settingRebuildPath: true
+    settingFollowRedirects: global
+    _type: request
+  - _id: fld_1ee9f2846928421fb200b94cb2793511
+    parentId: wrk_69326d3b65554c9ebfcfd7eb8c89149d
+    modified: 1738252182479
+    created: 1738252182479
+    name: Users
+    description: ""
+    environment: {}
+    environmentPropertyOrder: null
+    metaSortKey: -1738252182479
+    environmentType: kv
+    _type: request_group
+  - _id: wrk_69326d3b65554c9ebfcfd7eb8c89149d
+    parentId: null
+    modified: 1738232701018
+    created: 1738232701018
+    name: Security requests
+    description: ""
+    scope: collection
+    _type: workspace
+  - _id: req_4ee067a25a294ca19c64103865f91c22
+    parentId: fld_ce5f14f752bc4bc8a8b63736d4840502
+    modified: 1738596923525
+    created: 1738596904704
+    url: localhost:4000/user/merman/loans/active
+    name: Get active loans
+    description: ""
+    method: GET
+    body: {}
+    parameters: []
+    headers:
+      - name: User-Agent
+        value: insomnia/10.3.0
+    authentication:
+      type: bearer
+      token: eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJtZXJtYW4iLCJpYXQiOjE3Mzg1OTU5MTEsImV4cCI6MTczODY4MjMxMX0.m0TAqzR7aZzE3m5sX7LY8e5uZLTCnvLno7hB0TRoCCbSfYCVjaarDEGX4CjNH1rpoP2wU6c4Ao1PcMMCMJy9ZA
+    metaSortKey: -1738596904704
+    isPrivate: false
+    pathParameters: []
+    settingStoreCookies: true
+    settingSendCookies: true
+    settingDisableRenderRequestBody: false
+    settingEncodeUrl: true
+    settingRebuildPath: true
+    settingFollowRedirects: global
+    _type: request
+  - _id: fld_ce5f14f752bc4bc8a8b63736d4840502
+    parentId: wrk_69326d3b65554c9ebfcfd7eb8c89149d
+    modified: 1738251826706
+    created: 1738250226821
+    name: Loans
+    description: ""
+    environment: {}
+    environmentPropertyOrder: null
+    metaSortKey: -1738233329176
+    environmentType: kv
+    _type: request_group
+  - _id: req_b562aea2962e4242b6ca44f4e40ea089
+    parentId: fld_ce5f14f752bc4bc8a8b63736d4840502
+    modified: 1738597054478
+    created: 1738596737046
+    url: localhost:4000/user/merman/loans/2
+    name: Return item
+    description: ""
+    method: PUT
+    body: {}
+    parameters: []
+    headers:
+      - name: User-Agent
+        value: insomnia/10.3.0
+    authentication:
+      type: bearer
+      token: eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJtZXJtYW4iLCJpYXQiOjE3Mzg1OTU5MTEsImV4cCI6MTczODY4MjMxMX0.m0TAqzR7aZzE3m5sX7LY8e5uZLTCnvLno7hB0TRoCCbSfYCVjaarDEGX4CjNH1rpoP2wU6c4Ao1PcMMCMJy9ZA
+    metaSortKey: -1738596737046
+    isPrivate: false
+    pathParameters: []
+    settingStoreCookies: true
+    settingSendCookies: true
+    settingDisableRenderRequestBody: false
+    settingEncodeUrl: true
+    settingRebuildPath: true
+    settingFollowRedirects: global
+    _type: request
+  - _id: req_8113c6e2abc0488aac2db7565902c4a9
+    parentId: fld_ce5f14f752bc4bc8a8b63736d4840502
+    modified: 1738595974900
+    created: 1738250247261
+    url: localhost:4000/user/loans
+    name: Create
+    description: ""
+    method: POST
+    body:
+      mimeType: application/json
+      text: |-
+        {
+        	"itemId": "4",
+        	"userId": "1"
+        }
+    parameters: []
+    headers:
+      - name: Content-Type
+        value: application/json
+      - name: User-Agent
+        value: insomnia/10.3.0
+    authentication:
+      type: bearer
+      token: eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJtZXJtYW4iLCJpYXQiOjE3Mzg1OTU5MTEsImV4cCI6MTczODY4MjMxMX0.m0TAqzR7aZzE3m5sX7LY8e5uZLTCnvLno7hB0TRoCCbSfYCVjaarDEGX4CjNH1rpoP2wU6c4Ao1PcMMCMJy9ZA
+      disabled: false
+    metaSortKey: -1738250247261
+    isPrivate: false
+    pathParameters: []
+    settingStoreCookies: true
+    settingSendCookies: true
+    settingDisableRenderRequestBody: false
+    settingEncodeUrl: true
+    settingRebuildPath: true
+    settingFollowRedirects: global
+    _type: request
+  - _id: req_52d55204871f4d26b49c63e08568f893
+    parentId: fld_ce5f14f752bc4bc8a8b63736d4840502
+    modified: 1738595947678
+    created: 1738250238199
+    url: localhost:4000/user/merman/loans
+    name: Get all of user
+    description: ""
+    method: GET
+    body: {}
+    parameters: []
+    headers:
+      - name: User-Agent
+        value: insomnia/10.3.0
+    authentication:
+      type: bearer
+      token: eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJtZXJtYW4iLCJpYXQiOjE3Mzg1OTU5MTEsImV4cCI6MTczODY4MjMxMX0.m0TAqzR7aZzE3m5sX7LY8e5uZLTCnvLno7hB0TRoCCbSfYCVjaarDEGX4CjNH1rpoP2wU6c4Ao1PcMMCMJy9ZA
+    metaSortKey: -1738250238199
+    isPrivate: false
+    pathParameters: []
+    settingStoreCookies: true
+    settingSendCookies: true
+    settingDisableRenderRequestBody: false
+    settingEncodeUrl: true
+    settingRebuildPath: true
+    settingFollowRedirects: global
+    _type: request
+  - _id: req_5539fb1ee4f24961a556287a9229f657
+    parentId: fld_ce5f14f752bc4bc8a8b63736d4840502
+    modified: 1738595997368
+    created: 1738250228982
+    url: localhost:4000/admin/loans
+    name: Get all
+    description: ""
+    method: GET
+    body: {}
+    parameters: []
+    headers:
+      - name: User-Agent
+        value: insomnia/10.3.0
+    authentication:
+      type: bearer
+      token: eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJtZXJtYWlkIiwiaWF0IjoxNzM4NTk1OTkwLCJleHAiOjE3Mzg2ODIzOTB9.ti86BXudruP54xUnmo1p2rQArDCy6n_ckMv9nsGLacTtOJfgr1CY7ZJK71LI2TrNpEedgOpQu8Ihd1z7iZSR7w
+    metaSortKey: -1738250229082
+    isPrivate: false
+    pathParameters: []
+    settingStoreCookies: true
+    settingSendCookies: true
+    settingDisableRenderRequestBody: false
+    settingEncodeUrl: true
+    settingRebuildPath: true
+    settingFollowRedirects: global
+    _type: request
+  - _id: req_326f591524054ecf985241bf483814af
+    parentId: fld_3136268bd3ad426999955015bed865f6
+    modified: 1738233413209
+    created: 1738233332353
+    url: localhost:4000/auth/signup
+    name: Sign up
+    description: ""
+    method: POST
+    body:
+      mimeType: application/json
+      text: |-
+        {
+        	"username": "merman",
+        	"email": "mister@merman.com",
+        	"password": "password",
+        	"role": ["mod", "user"]
+        }
+    parameters: []
+    headers:
+      - name: Content-Type
+        value: application/json
+      - name: User-Agent
+        value: insomnia/10.3.0
+    authentication: {}
+    metaSortKey: -1738233339366
+    isPrivate: false
+    pathParameters: []
+    settingStoreCookies: true
+    settingSendCookies: true
+    settingDisableRenderRequestBody: false
+    settingEncodeUrl: true
+    settingRebuildPath: true
+    settingFollowRedirects: global
+    _type: request
+  - _id: fld_3136268bd3ad426999955015bed865f6
+    parentId: wrk_69326d3b65554c9ebfcfd7eb8c89149d
+    modified: 1738233329076
+    created: 1738233329076
+    name: Security
+    description: ""
+    environment: {}
+    environmentPropertyOrder: null
+    metaSortKey: -1738233329076
+    environmentType: kv
+    _type: request_group
+  - _id: req_9a9a5589ab60435eb00918892630b8df
+    parentId: fld_3136268bd3ad426999955015bed865f6
+    modified: 1738244055837
+    created: 1738243938689
+    url: localhost:4000/auth/signup
+    name: Sign up admin
+    description: ""
+    method: POST
+    body:
+      mimeType: application/json
+      text: |-
+        {
+        	"username": "mermaid",
+        	"email": "miss@mermaid.com",
+        	"password": "password",
+        	"role": ["mod", "user", "admin"]
+        }
+    parameters: []
+    headers:
+      - name: Content-Type
+        value: application/json
+      - name: User-Agent
+        value: insomnia/10.3.0
+    authentication: {}
+    metaSortKey: -1738233339316
+    isPrivate: false
+    pathParameters: []
+    settingStoreCookies: true
+    settingSendCookies: true
+    settingDisableRenderRequestBody: false
+    settingEncodeUrl: true
+    settingRebuildPath: true
+    settingFollowRedirects: global
+    _type: request
+  - _id: req_8d7eb2e881b44a8e8696f943e6a82a60
+    parentId: fld_3136268bd3ad426999955015bed865f6
+    modified: 1738233471439
+    created: 1738233435995
+    url: localhost:4000/auth/signin
+    name: Sign in
+    description: ""
+    method: POST
+    body:
+      mimeType: application/json
+      text: |-
+        {
+        	"username": "merman",
+        	"password": "password"
+        }
+    parameters: []
+    headers:
+      - name: Content-Type
+        value: application/json
+      - name: User-Agent
+        value: insomnia/10.3.0
+    authentication: {}
+    metaSortKey: -1738233339266
+    isPrivate: false
+    pathParameters: []
+    settingStoreCookies: true
+    settingSendCookies: true
+    settingDisableRenderRequestBody: false
+    settingEncodeUrl: true
+    settingRebuildPath: true
+    settingFollowRedirects: global
+    _type: request
+  - _id: req_1a6cc4573350425ba954926467ef1126
+    parentId: fld_3136268bd3ad426999955015bed865f6
+    modified: 1738244067536
+    created: 1738243943873
+    url: localhost:4000/auth/signin
+    name: Sign in admin
+    description: ""
+    method: POST
+    body:
+      mimeType: application/json
+      text: |-
+        {
+        	"username": "mermaid",
+        	"password": "password"
+        }
+    parameters: []
+    headers:
+      - name: Content-Type
+        value: application/json
+      - name: User-Agent
+        value: insomnia/10.3.0
+    authentication: {}
+    metaSortKey: -1738233327498.5
+    isPrivate: false
+    pathParameters: []
+    settingStoreCookies: true
+    settingSendCookies: true
+    settingDisableRenderRequestBody: false
+    settingEncodeUrl: true
+    settingRebuildPath: true
+    settingFollowRedirects: global
+    _type: request
+  - _id: req_0c386590f09044bdb561f77f4c286f16
+    parentId: fld_687589e622574cd18aeb84bccd3330d8
+    modified: 1738597185312
+    created: 1738246889673
+    url: localhost:4000/items
+    name: Create
+    description: ""
+    method: POST
+    body:
+      mimeType: application/json
+      text: |-
+        {
+        	"itemType": "BOARD_GAME",
+        	"title": "Seltzers of Satan",
+        	"author": "Fun with Friends, Inc.",
+        	"publisher": "Fun with Friends, Inc.",
+        	"year": 2022,
+        	"genre": "strategy"
+        }
+    parameters: []
+    headers:
+      - name: Content-Type
+        value: application/json
+      - name: User-Agent
+        value: insomnia/10.3.0
+    authentication:
+      type: bearer
+      token: eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJtZXJtYWlkIiwiaWF0IjoxNzM4MjQ2OTU0LCJleHAiOjE3MzgzMzMzNTR9.t4KblQDhKvNZDfeeu444SeE7A_vxD1PeEFPFAcZQy9utFoi9AJMotFpAr2OGTPlds4h15xy-EviqtECqzxb3fg
+    metaSortKey: -1738246889673
+    isPrivate: false
+    pathParameters: []
+    settingStoreCookies: true
+    settingSendCookies: true
+    settingDisableRenderRequestBody: false
+    settingEncodeUrl: true
+    settingRebuildPath: true
+    settingFollowRedirects: global
+    _type: request
+  - _id: fld_687589e622574cd18aeb84bccd3330d8
+    parentId: wrk_69326d3b65554c9ebfcfd7eb8c89149d
+    modified: 1738246885021
+    created: 1738233313299
+    name: Items CRUD
+    description: ""
+    environment: {}
+    environmentPropertyOrder: null
+    metaSortKey: -1738233313299
+    environmentType: kv
+    _type: request_group
+  - _id: req_8de10d96c37a4752b57dd1e49f7ad535
+    parentId: fld_687589e622574cd18aeb84bccd3330d8
+    modified: 1738245521636
+    created: 1738245343915
+    url: localhost:4000/items/1
+    name: Delete
+    description: ""
+    method: DELETE
+    body: {}
+    parameters: []
+    headers:
+      - name: User-Agent
+        value: insomnia/10.3.0
+    authentication:
+      type: bearer
+      token: eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJtZXJtYWlkIiwiaWF0IjoxNzM4MjQ1MzgyLCJleHAiOjE3MzgzMzE3ODJ9.WbQNjN0sCVYRsOtYyXNJM2NHWfQ6WOCiC4MJIz-_ljluptBVgoLuptpfgGn0Y_YE4ovWpCsnPxfGmWjMxokfQA
+    metaSortKey: -1738245343915
+    isPrivate: false
+    pathParameters: []
+    settingStoreCookies: true
+    settingSendCookies: true
+    settingDisableRenderRequestBody: false
+    settingEncodeUrl: true
+    settingRebuildPath: true
+    settingFollowRedirects: global
+    _type: request
+  - _id: req_012b7d1c32d649f68eefe1f3161e8468
+    parentId: fld_687589e622574cd18aeb84bccd3330d8
+    modified: 1738246975739
+    created: 1738241606142
+    url: localhost:4000/items/1
+    name: Update
+    description: ""
+    method: PUT
+    body:
+      mimeType: application/json
+      text: |-
+        {
+        		"title": "Show to Write a Bestselling Book in 10 Days",
+        		"author": "Arthur Wrights",
+        		"publisher": "Random Books, Inc.",
+        		"year": 2007,
+        		"genre": "education"
+        }
+    parameters: []
+    headers:
+      - name: Content-Type
+        value: application/json
+      - name: User-Agent
+        value: insomnia/10.3.0
+    authentication:
+      type: bearer
+      token: eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJtZXJtYWlkIiwiaWF0IjoxNzM4MjQ2OTU0LCJleHAiOjE3MzgzMzMzNTR9.t4KblQDhKvNZDfeeu444SeE7A_vxD1PeEFPFAcZQy9utFoi9AJMotFpAr2OGTPlds4h15xy-EviqtECqzxb3fg
+      prefix: ""
+      disabled: false
+    metaSortKey: -1738241606142
+    isPrivate: false
+    pathParameters: []
+    settingStoreCookies: true
+    settingSendCookies: true
+    settingDisableRenderRequestBody: false
+    settingEncodeUrl: true
+    settingRebuildPath: true
+    settingFollowRedirects: global
+    _type: request
+  - _id: req_614393b267c94128b715588056c71256
+    parentId: fld_687589e622574cd18aeb84bccd3330d8
+    modified: 1738250217792
+    created: 1738237890403
+    url: localhost:4000/items/1
+    name: Get one
+    description: ""
+    method: GET
+    body: {}
+    parameters: []
+    headers:
+      - name: User-Agent
+        value: insomnia/10.3.0
+    authentication:
+      type: bearer
+      token: eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJtZXJtYW4iLCJpYXQiOjE3MzgyNTAyMDMsImV4cCI6MTczODMzNjYwM30.im7QfneiXxCxJBjeCFcvQWw-IUpnSTtQ-mgALZvWOp_T6_qtTNjkkAE-KCcko42PTjIYcSN-lXz9EI-UdeXwjg
+      disabled: false
+    metaSortKey: -1738237890403
+    isPrivate: false
+    pathParameters: []
+    settingStoreCookies: true
+    settingSendCookies: true
+    settingDisableRenderRequestBody: false
+    settingEncodeUrl: true
+    settingRebuildPath: true
+    settingFollowRedirects: global
+    _type: request
+  - _id: req_6f2cec99fd0c4c75a170711befb3c8d3
+    parentId: fld_687589e622574cd18aeb84bccd3330d8
+    modified: 1738595936566
+    created: 1738233268519
+    url: localhost:4000/items
+    name: Get all
+    description: ""
+    method: GET
+    body: {}
+    parameters: []
+    headers:
+      - name: User-Agent
+        value: insomnia/10.3.0
+    authentication:
+      type: bearer
+      token: eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJtZXJtYW4iLCJpYXQiOjE3Mzg1OTU5MTEsImV4cCI6MTczODY4MjMxMX0.m0TAqzR7aZzE3m5sX7LY8e5uZLTCnvLno7hB0TRoCCbSfYCVjaarDEGX4CjNH1rpoP2wU6c4Ao1PcMMCMJy9ZA
+      prefix: ""
+    metaSortKey: -1738233315731
+    isPrivate: false
+    pathParameters: []
+    settingStoreCookies: true
+    settingSendCookies: true
+    settingDisableRenderRequestBody: false
+    settingEncodeUrl: true
+    settingRebuildPath: true
+    settingFollowRedirects: global
+    _type: request
+  - _id: env_571a2080ccb592b6ebe062d8d494a261bc1d7a6a
+    parentId: wrk_69326d3b65554c9ebfcfd7eb8c89149d
+    modified: 1738232701021
+    created: 1738232701021
+    name: Base Environment
+    data: {}
+    dataPropertyOrder: null
+    color: null
+    isPrivate: false
+    metaSortKey: 1738232701021
+    environmentType: kv
+    _type: environment
+  - _id: jar_571a2080ccb592b6ebe062d8d494a261bc1d7a6a
+    parentId: wrk_69326d3b65554c9ebfcfd7eb8c89149d
+    modified: 1738232701023
+    created: 1738232701023
+    name: Default Jar
+    cookies: []
+    _type: cookie_jar
